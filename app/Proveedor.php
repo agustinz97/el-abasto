@@ -8,4 +8,7 @@ class Proveedor extends Model
 {
     protected $table = 'proveedores';
 
+    public function marcas(){
+        return $this->hasMany('App\Marca');
+    }
 }

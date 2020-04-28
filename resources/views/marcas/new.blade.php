@@ -9,7 +9,17 @@
                         <h5>Nueva marca</h5>
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST">
+                        @if (Session::has('success'))
+                            <div class="alert alert-success">
+                                {{Session::get('success')}}
+                            </div>
+                        @endif
+                        @if (Session::has('error'))
+                            <div class="alert alert-danger">
+                                {{Session::get('error')}}
+                            </div>
+                        @endif
+                        <form action="{{route('marcas.create')}}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="name">Nombre de la marca</label>
@@ -26,7 +36,24 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-success">Guardar</button>
+                                <select class="custom-select" required id="proveedor" name="proveedor">
+                                    <option value="0">Seleccione un proveedor</option>
+                                    @foreach($proveedores as $proveedor)
+                                    <option value="{{$proveedor->id}}" {{old('proveedor') == $proveedor->id ? 'selected' : ''}}>
+                                        {{$proveedor->name}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @if ($errors->any())
+                            <div class="form-group">
+                                <div class="alert alert-danger">
+                                    {{$errors->first()}}
+                                </div>
+                            </div>
+                            @endif
+                            <div class="form-group">
+                                <button class="btn btn-success float-right">Guardar</button>
                             </div>
                         </form>
                     </div>

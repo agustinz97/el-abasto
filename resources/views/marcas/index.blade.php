@@ -4,21 +4,20 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col-md-4">
-                <h5>Listado de proveedores</h5>
+                <h5>Listado de marcas</h5>
             </div>
             <div class="col-md-8">
-                <a href="{{route('proveedores.new')}}" class="btn btn-success float-right">Nuevo +</a>
+                <a href="{{route('marcas.new')}}" class="btn btn-success float-right">Nuevo +</a>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <table id="proveedores-table" class="table table-hover table-striped">
+                <table id="marcas-table" class="table table-hover table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
+                            <th>proveedor</th>
                             <th width="10%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -31,23 +30,14 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#proveedores-table').DataTable({
+            $('#marcas-table').DataTable({
                 "serverside": true,
-                "ajax": "{{route('datatables.proveedores')}}",
+                "ajax": "{{route('datatables.marcas')}}",
                 "columns": [
-                    {
-                        data: 'id',
-                        render: function (data, type, row){
-                            return '#'+data.padStart(6, '0')
-                        }
-                    },
+                    {data: 'id'},
                     {data: 'name'},
                     {
-                        data: 'email',
-                        defaultContent: '-'
-                    },
-                    {
-                        data: 'phone',
+                        data: 'proveedor.name',
                         defaultContent: '-'
                     },
                     {data: 'btn'},
@@ -70,20 +60,26 @@
             .then( async (result) => {
                 if (result.value) {
 
-                    const url = route('proveedores.delete', id)
+                    const url = route('marcas.delete', id)
 
                     try{
                         const response = await axios.delete(url)
 
                         Swal.fire(
-                            'Eliminado!',
-                            'El proveedor fue eliminado',
+                            '¡Eliminado!',
+                            'La marca fue eliminada',
                             'success'
                         )
 
-                        $('#proveedores-table').DataTable().ajax.reload()
+                        $('#marcas-table').DataTable().ajax.reload()
                         
                     }catch{
+                        Swal.fire(
+                            '¡Algo salió mal!',
+                            'Intente de nuevo mas tarde.',
+                            'error'
+                        )
+
                         console.error(error)
                     }
                     
