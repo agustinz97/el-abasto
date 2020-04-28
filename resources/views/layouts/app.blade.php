@@ -128,6 +128,14 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        $.extend( $.fn.dataTable.defaults, {
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            }
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>
