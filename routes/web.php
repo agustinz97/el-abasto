@@ -24,5 +24,8 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'proveedores'], function () {
         Route::get('/', 'ProveedoresController@index')->name('proveedores.index');
+        Route::get('/new', 'ProveedoresController@new')->name('proveedores.new');
+        Route::post('/', 'ProveedoresController@create')->name('proveedores.create');
+        Route::post('/{id}', 'ProveedoresController@show')->name('proveedores.show');
     });
 });

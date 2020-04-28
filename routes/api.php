@@ -17,3 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::group(['prefix' => 'proveedores'], function () {
+    Route::delete('/{id}', 'ProveedoresController@delete')->name('proveedores.delete');
+});
+
+Route::group(['prefix' => 'datatables'], function () {
+    Route::get('/proveedores', function () {
+        return datatables()
+                ->eloquent(App\Proveedor::query())
+                ->addColumn('btn', 'proveedores.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+    })->name('datatables.proveedores');
+});

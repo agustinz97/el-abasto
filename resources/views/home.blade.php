@@ -1,12 +1,12 @@
 @extends('layouts.app')
-    <style>
-        .icon{
-            font-size: 7rem;
-            color: var(--primary);
-        }
-    </style>
-@section('styles')
     
+@section('styles')
+<style>
+    .icon{
+        font-size: 7rem;
+        color: var(--primary);
+    }
+</style>
 @endsection
 
 @section('content')
