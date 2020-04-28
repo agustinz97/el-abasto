@@ -18,6 +18,16 @@
                     <div class="icon mb-3">
                         <i class="fas fa-tags"></i>
                     </div>
+                    <a href="{{route('marcas.index')}}">Marcas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center p-3">
+                    <div class="icon mb-3">
+                        <i class="fas fa-box-open"></i>
+                    </div>
                     <a href="#">Productos</a>
                 </div>
             </div>
@@ -32,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3">
             <div class="card">
                 <div class="card-body text-center p-3">
                     <div class="icon mb-3">

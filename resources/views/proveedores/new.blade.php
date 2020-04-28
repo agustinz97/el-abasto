@@ -68,7 +68,9 @@
                                     {{$errors->first()}}
                                 </div>
                             @endif
-                            <button class="btn btn-success mb-3">Guardar</button>
+                            <div class="form-group">
+                                <button class="btn btn-success float-right">Guardar</button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -28,4 +28,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', 'ProveedoresController@create')->name('proveedores.create');
         Route::post('/{id}', 'ProveedoresController@show')->name('proveedores.show');
     });
+
+    Route::group(['prefix' => 'marcas'], function () {
+        Route::get('/', 'MarcasController@index')->name('marcas.index');
+        Route::get('/new', 'MarcasController@new')->name('marcas.new');
+        Route::post('/', 'MarcasController@create')->name('marcas.create');
+        Route::post('/{id}', 'MarcasController@show')->name('marcas.show');
+    });
 });
