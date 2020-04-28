@@ -38,7 +38,7 @@ class ProveedoresController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|unique:proveedores,name',
             'email' => 'nullable|string|unique:proveedores,email',
-            'phone' => 'nullable|numeric|unique:proveedores,phone'
+            'phone' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10'
         ]);
 
         if($validator->fails()){
