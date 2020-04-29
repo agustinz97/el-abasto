@@ -15,7 +15,15 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->float('price');
+            $table->float('discount_percent');
+            $table->string('img_path');
+            $table->float('stock');
+            $table->bigInteger('marca_id')->unsigned()->nullable();
             $table->timestamps();
+
+            $table->foreign('marca_id')->references('id')->on('marcas');
         });
     }
 
