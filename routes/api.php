@@ -66,7 +66,11 @@ Route::group(['prefix' => 'datatables'], function () {
                     }
                 })
                 ->editColumn('format_name', function($product){
-                    return $product->name.' x'.$product->kilograms.'Kg';
+
+                    if($product->kilograms > 0){
+                        return $product->name.' x'.$product->kilograms.'Kg';
+                    }
+                    return $product->name;
                 })
                 ->toJson();
     })->name('datatables.productos');

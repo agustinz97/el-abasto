@@ -83,7 +83,7 @@
     <script>
         $(document).ready(function() {
             $('#productos-table').DataTable({
-                "responsive": true,
+                "order": [[ 1, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
