@@ -68,4 +68,33 @@ class ProductosController extends Controller
 
     }
 
+    public function updatePrices(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'productos' => 'required|array',
+            'productos.*' => 'integer',
+            'percentage' => 'required|numeric'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 403);
+        }
+
+        $productos = Producto::findMany($request->input('productos'));
+
+        try{
+            foreach($productos as $prod){
+
+                $increment = $prod->price * $request->input('percentage') / 100;
+
+                $prod->price += $increment;
+                $prod->update();
+    
+            }
+        }catch(Exception $ex){
+            return response()->json('Internal error', 500);
+        }
+
+    }
+
 }

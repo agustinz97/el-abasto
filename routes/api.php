@@ -29,6 +29,7 @@ Route::group(['prefix' => 'marcas'], function () {
 
 Route::group(['prefix' => 'productos'], function () {
     Route::delete('/{id}', 'ProductosController@delete')->name('productos.delete');
+    Route::post('/actualizar-precios', 'ProductosController@updatePrices')->name('productos.updatePrices');
 });
 
 Route::group(['prefix' => 'datatables'], function () {
