@@ -28,7 +28,7 @@
                     <div class="icon mb-3">
                         <i class="fas fa-box-open"></i>
                     </div>
-                    <a href="#">Productos</a>
+                    <a href="{{route('productos.index')}}">Productos</a>
                 </div>
             </div>
         </div>

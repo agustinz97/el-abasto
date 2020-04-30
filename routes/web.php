@@ -35,4 +35,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', 'MarcasController@create')->name('marcas.create');
         Route::post('/{id}', 'MarcasController@show')->name('marcas.show');
     });
+
+    Route::group(['prefix' => 'productos'], function () {
+        Route::get('/', 'ProductosController@index')->name('productos.index');
+        Route::get('/new', 'ProductosController@new')->name('productos.new');
+        Route::post('/', 'ProductosController@create')->name('productos.create');
+        Route::post('/{id}', 'ProductosController@show')->name('productos.show');
+    });
 });

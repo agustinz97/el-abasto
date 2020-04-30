@@ -93,10 +93,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('proveedores.index') }}">
+                                    <a class="dropdown-item" href="{{ route('productos.index') }}">
                                         Listado
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('proveedores.new') }}">
+                                    <a class="dropdown-item" href="{{ route('productos.new') }}">
                                         Nuevo
                                     </a>
                                 </div>

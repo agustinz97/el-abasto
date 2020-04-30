@@ -27,6 +27,10 @@ Route::group(['prefix' => 'marcas'], function () {
     Route::delete('/{id}', 'MarcasController@delete')->name('marcas.delete');
 });
 
+Route::group(['prefix' => 'productos'], function () {
+    Route::delete('/{id}', 'ProductosController@delete')->name('productos.delete');
+});
+
 Route::group(['prefix' => 'datatables'], function () {
     Route::get('/proveedores', function () {
         return datatables()
@@ -43,4 +47,12 @@ Route::group(['prefix' => 'datatables'], function () {
                 ->rawColumns(['btn'])
                 ->toJson();
     })->name('datatables.marcas');
+
+    Route::get('/productos', function () {
+        return datatables()
+                ->eloquent(App\Producto::query()->with('marca'))
+                ->addColumn('btn', 'productos.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+    })->name('datatables.productos');
 });
