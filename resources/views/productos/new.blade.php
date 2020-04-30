@@ -19,7 +19,7 @@
                                 {{Session::get('error')}}
                             </div>
                         @endif
-                        <form action="{{route('productos.create')}}">
+                        <form action="{{route('productos.create')}}" method="POST">
                             @csrf
 
                             <div class="row">
@@ -34,6 +34,20 @@
                                             class="form-control" 
                                             id="name" name="name"
                                             value="{{old('name')}}"
+                                            >
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <label for="kg">Kg</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-apend">
+                                            <span class="input-group-text">Kg</span>
+                                        </div>
+                                        <input 
+                                            type="text" 
+                                            class="form-control" 
+                                            id="kg" name="kg"
+                                            value="{{old('kg')}}"
                                             >
                                     </div>
                                 </div>
@@ -72,7 +86,7 @@
                             <div class="row">
 
                                 <div class="col-6">
-                                    <label for="stock">Marca</label>
+                                    <label for="marca">Marca</label>
                                     <select class="custom-select" required id="marca" name="marca">
                                         <option value="0">Seleccione la marca</option>
                                         @foreach($marcas as $marca)

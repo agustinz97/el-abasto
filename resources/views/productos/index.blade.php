@@ -47,7 +47,7 @@
                         }
                     },
                     {data: 'marca.name'},
-                    {data: 'name'},
+                    {data: 'format_name'},
                     {
                         data: 'base_price',
                         render: function (data, type, row){

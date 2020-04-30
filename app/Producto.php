@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $table = 'productos';
-    public $appends = ['base_price', 'kg_price', 'retail_price', 'wholesale_price', 'resale_price'];
+    public $appends = ['base_price', 'kg_price', 'retail_price', 
+                    'wholesale_price', 'resale_price', 'format_name'];
 
     public function marca(){
         return $this->belongsTo('App\Marca');
@@ -22,31 +23,39 @@ class Producto extends Model
 
     public function getKgPriceAttribute(){
 
-        $baseKgPrice = $this->base_price / $this->kilograms;
-        $kgPrice = ($baseKgPrice * 40) / 100;
+        if($this->kilograms > 0){
+            $baseKgPrice = $this->base_price / $this->kilograms;
+            $profit = ($baseKgPrice * 40) / 100;
 
-        return $kgPrice;
+            return $baseKgPrice + $profit;
+        }
+
+        return null;
     }
 
     public function getRetailPriceAttribute(){
 
-        $retailPrice = $this->basePrice * 30 / 100;
+        $profit = $this->basePrice * 30 / 100;
 
-        return $retailPrice;
+        return $this->base_price + $profit;
     }
 
     public function getWholesalePriceAttribute(){
 
-        $price = $this->basePrice * 20 / 100;
+        $profit = $this->basePrice * 20 / 100;
 
-        return $price;
+        return $this->base_price + $profit;
     }
 
     
     public function getResalePriceAttribute(){
 
-        $price = $this->basePrice * 25 / 100;
+        $profit = $this->basePrice * 25 / 100;
 
-        return $price;
+        return $this->base_price + $profit;
+    }
+
+    public function getFormatNameAttribute(){
+        return $this->name.' x'.$this->kilograms.'Kg';
     }
 }

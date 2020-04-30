@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Marca;
 use App\Producto;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductosController extends Controller
 {
@@ -30,7 +32,40 @@ class ProductosController extends Controller
 
     public function create(Request $request){
 
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'kg' => 'nullable|numeric',
+            'price' => 'required|numeric',
+            'discount' => 'nullable|numeric',
+            'marca' => 'required|numeric|exists:marcas,id',
+            'stock' => 'nullable|numeric'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        $producto = new Producto();
+        $producto->name = $request->input('name');
+        $producto->kilograms = $request->input('kg');
+        $producto->price = $request->input('price');
+        $producto->discount_percent = $request->input('discount');
+        $producto->stock = $request->input('stock');
+        $producto->img_path = '';
+        $producto->marca()->associate($request->input('marca'));
+
+        try{
+            $producto->save();
+
+            return redirect()->back()->with([
+                'success' => 'Producto agregado correctamente'
+            ]);
+        }catch(Exception $e){
+            return redirect()->back()->with([
+                'error' => $e->getMessage()
+            ])->withInput($request->all());
+        }
+
     }
 
 }
