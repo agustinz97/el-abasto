@@ -1,5 +1,7 @@
 <?php
 
+use App\Marca;
+use App\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +56,18 @@ Route::group(['prefix' => 'datatables'], function () {
                 ->eloquent(App\Producto::query()->with('marca'))
                 ->addColumn('btn', 'productos.actions')
                 ->rawColumns(['btn'])
+                ->editColumn('marca.proveedor_id', function ($product){
+                    $proveedor = Proveedor::find($product->marca->proveedor_id);
+
+                    if(isset($proveedor)){
+                        return $proveedor->name;
+                    }else{
+                        return '-';
+                    }
+                })
+                ->editColumn('format_name', function($product){
+                    return $product->name.' x'.$product->kilograms.'Kg';
+                })
                 ->toJson();
     })->name('datatables.productos');
 });

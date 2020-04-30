@@ -23,6 +23,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th width="10%">Proveedor</th>
                             <th width="10%">Marca</th>
                             <th width="20%">Nombre</th>
                             <th>Precio</th>
@@ -92,6 +93,7 @@
                             return '#'+data.padStart(6, '0')
                         }
                     },
+                    {data: 'marca.proveedor_id'},
                     {data: 'marca.name'},
                     {data: 'format_name'},
                     {

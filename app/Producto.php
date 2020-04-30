@@ -8,7 +8,7 @@ class Producto extends Model
 {
     protected $table = 'productos';
     public $appends = ['base_price', 'kg_price', 'retail_price', 
-                    'wholesale_price', 'resale_price', 'format_name'];
+                    'wholesale_price', 'resale_price'];
 
     public function marca(){
         return $this->belongsTo('App\Marca');
@@ -55,7 +55,4 @@ class Producto extends Model
         return $this->base_price + $profit;
     }
 
-    public function getFormatNameAttribute(){
-        return $this->name.' x'.$this->kilograms.'Kg';
-    }
 }
