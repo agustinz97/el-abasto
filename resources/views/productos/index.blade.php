@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('styles')
+<style>
+	tfoot {
+		display: table-header-group;
+	}
+</style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row mb-3">
@@ -33,7 +41,15 @@
                             <th>Precio mayorista</th>
                             <th width="10%">&nbsp;</th>
                         </tr>
-                    </thead>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>código</th>
+							<th>proveedor</th>
+							<th>marca</th>
+							<th>nombre</th>
+						</tr>
+					</tfoot>
                 </table>
             </div>
         </div>
@@ -82,7 +98,13 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#productos-table').DataTable({
+
+			$('#productos-table tfoot th').each( function () {
+				var title = $(this).text();
+				$(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Buscar por '+title+'" />' );
+			} );
+
+            let table = $('#productos-table').DataTable({
                 "order": [[ 1, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
@@ -127,7 +149,17 @@
                         }
                     },
                     {data: 'btn'},
-                ] 
+                ] ,
+				initComplete: function () {
+					this.api().columns().every(function () {
+						var column = this;
+						var input = document.createElement("input");
+						$(input).appendTo($(column.footer()).empty())
+						.on('change', function () {
+							column.search($(this).val(), false, false, true).draw();
+						});
+					});
+				}
             });
         } );
     </script>
