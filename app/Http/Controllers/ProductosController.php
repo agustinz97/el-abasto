@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Marca;
 use App\Producto;
+use App\Proveedor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,8 @@ class ProductosController extends Controller
 
     public function new(){
         return view('productos.new')->with([
-            'marcas' => Marca::all()
+			'marcas' => Marca::all(),
+			'proveedores' => Proveedor::all()
         ]);
     }
 

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col-md-8 col-sm-12">
+            <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         Nuevo producto
@@ -20,10 +20,54 @@
                             </div>
                         @endif
                         <form action="{{route('productos.create')}}" method="POST">
-                            @csrf
+							@csrf
+							
+							<div class="row">
+								<div class="col-md-6 col-sm-12">
+                                    <label for="marca">Proveedor</label>
+                                    <div class="input-group mb-3">
+										<select class="custom-select" required id="proveedor" name="proveedor">
+											<option value="0">Seleccione el proveedor</option>
+											@foreach($proveedores as $proveedor)
+											<option value="{{$proveedor->id}}" {{old('proveedor') == $proveedor->id ? 'selected' : ''}}>
+												{{$proveedor->name}}
+											</option>
+											@endforeach
+										</select>
+										<button 
+											class="btn btn-primary ml-2" 
+											data-toggle="modal" data-target="#modal-proveedor"
+											id="btnProveedor"
+											type="button">
+											Nuevo +
+										</button>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-12">
+                                    <label for="marca">Marca</label>
+                                    <div class="input-group mb-3">
+										<select class="custom-select" required id="marca" name="marca">
+											<option value="0">Seleccione la marca</option>
+											@foreach($marcas as $marca)
+											<option value="{{$marca->id}}" {{old('marca') == $marca->id ? 'selected' : ''}}>
+												{{$marca->name}}
+											</option>
+											@endforeach
+										</select>
+										<button 
+											class="btn btn-primary ml-2" 
+											data-toggle="modal" data-target="#modal-marca"
+											id="btnMarca"
+											type="button">
+											Nueva +
+										</button>
+									</div>
+								</div>
+							</div>
 
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-md-8 col-sm-12">
                                     <label for="name">Nombre del producto</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -37,7 +81,7 @@
                                             >
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3 col-sm-12">
                                     <label for="kg">Kg</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-apend">
@@ -54,7 +98,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <label for="price">Precio de compra</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -68,7 +112,7 @@
                                             >
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3 col-sm-12">
                                     <label for="discount">Descuento</label>
                                     <div class="input-group mb-3">
                                         <input 
@@ -83,21 +127,9 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
 
-                                <div class="col-6">
-                                    <label for="marca">Marca</label>
-                                    <select class="custom-select" required id="marca" name="marca">
-                                        <option value="0">Seleccione la marca</option>
-                                        @foreach($marcas as $marca)
-                                        <option value="{{$marca->id}}" {{old('marca') == $marca->id ? 'selected' : ''}}>
-                                            {{$marca->name}}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <label for="stock">Stock incial</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-preppend">
@@ -110,7 +142,7 @@
                                             value="{{old('stock')}}">
                                       </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -124,6 +156,40 @@
                     </div>
                 </div>
             </div>
+        </div>
+	</div>
+	
+	<!-- Modal Nueva Marca -->
+    <div class="modal fade" id="modal-marca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear marca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @include('partials.new-marca-form')
+            </div>
+        </div>
+        </div>
+	</div>
+	
+	<!-- Modal Nuevo Proveedor -->
+    <div class="modal fade" id="modal-proveedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @include('partials.new-proveedor-form')
+            </div>
+        </div>
         </div>
     </div>
 @endsection

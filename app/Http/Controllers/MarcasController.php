@@ -24,7 +24,6 @@ class MarcasController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:marcas,name',
-            'proveedor' => 'required|numeric|exists:proveedores,id'
         ]);
 
         if($validator->fails()){
@@ -33,7 +32,6 @@ class MarcasController extends Controller
 
         $marca = new Marca();
         $marca->name = $request->input('name');
-        $marca->proveedor()->associate($request->input('proveedor'));
 
         try{
             $marca->save();
