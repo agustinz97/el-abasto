@@ -47,8 +47,8 @@
 								<div class="col-md-6 col-sm-12">
                                     <label for="marca">Marca</label>
                                     <div class="input-group mb-3">
-										<select class="custom-select" required id="marca" name="marca">
-											<option value="0">Seleccione la marca</option>
+										<select class="custom-select" id="marca" name="marca">
+											<option value="">Seleccione la marca</option>
 											@foreach($marcas as $marca)
 											<option value="{{$marca->id}}" {{old('marca') == $marca->id ? 'selected' : ''}}>
 												{{$marca->name}}

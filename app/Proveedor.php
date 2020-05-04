@@ -8,7 +8,7 @@ class Proveedor extends Model
 {
     protected $table = 'proveedores';
 
-    public function marcas(){
-        return $this->hasMany('App\Marca');
+    public function productos(){
+        return $this->belongsToMany('App\Producto', 'productos_proveedores' )->withPivot('price');
     }
 }

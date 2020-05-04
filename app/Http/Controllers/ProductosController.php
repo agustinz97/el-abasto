@@ -7,6 +7,7 @@ use App\Producto;
 use App\Proveedor;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductosController extends Controller
@@ -39,9 +40,12 @@ class ProductosController extends Controller
             'kg' => 'nullable|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
-            'marca' => 'required|numeric|exists:marcas,id',
+            'marca' => 'nullable|numeric|exists:marcas,id',
+            'proveedor' => '|numeric|exists:proveedores,id',
             'stock' => 'nullable|numeric'
-        ]);
+		]);
+		
+		/* dd($request->input('marca')); */
 
         if($validator->fails()){
             return redirect()->back()->withErrors($validator)->withInput($request->all());
@@ -49,15 +53,19 @@ class ProductosController extends Controller
 
         $producto = new Producto();
         $producto->name = $request->input('name');
-        $producto->kilograms = $request->input('kg');
-        $producto->price = $request->input('price');
+        $producto->kg = $request->input('kg') || 0;
         $producto->discount_percent = $request->input('discount');
-        $producto->stock = $request->input('stock');
+        $producto->stock = $request->input('stock') || 0;
         $producto->img_path = '';
-        $producto->marca()->associate($request->input('marca'));
+		
 
         try{
-            $producto->save();
+			$producto->marca()->associate($request->input('marca'));
+			$producto->save();
+		
+			$producto->proveedores()->attach($request->input('proveedor'), [
+				'price' => $request->input('price')]
+			);
 
             return redirect()->back()->with([
                 'success' => 'Producto agregado correctamente'
@@ -97,6 +105,12 @@ class ProductosController extends Controller
             return response()->json('Internal error', 500);
         }
 
-    }
+	}
+	
+	public function show($id){
+		$producto = Producto::findOrFail($id);
+
+		dd($producto);
+	}
 
 }

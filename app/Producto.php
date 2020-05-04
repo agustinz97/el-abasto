@@ -8,23 +8,38 @@ class Producto extends Model
 {
     protected $table = 'productos';
     public $appends = ['base_price', 'kg_price', 'retail_price', 
-                    'wholesale_price', 'resale_price'];
+					'wholesale_price', 'resale_price'];
+	private $SHIPPING_COST = 55;
 
     public function marca(){
         return $this->belongsTo('App\Marca');
-    }
+	}
+	
+	public function proveedores(){
+		return $this->belongsToMany('App\Proveedor', 'productos_proveedores')->withPivot('price');
+	}
 
     public function getBasePriceAttribute(){
+		$prov = $this
+					->proveedores()
+					->orderBy('price', 'desc')	
+					->first();
 
-        $discountValue = ($this->price * $this->discount_percent) / 100;
+		if(!isset($prov)){
+			return 0;
+		}
 
-        return $this->price - $discountValue;
+		$price = $prov->pivot->price;
+
+        $discountValue = ($price * $this->discount_percent) / 100;
+
+        return $price - $discountValue + $this->SHIPPING_COST;
     }
 
     public function getKgPriceAttribute(){
 
-        if($this->kilograms > 0){
-            $baseKgPrice = $this->base_price / $this->kilograms;
+        if($this->kg > 0){
+            $baseKgPrice = $this->base_price / $this->kg;
             $profit = ($baseKgPrice * 40) / 100;
 
             return $baseKgPrice + $profit;

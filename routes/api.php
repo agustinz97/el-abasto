@@ -1,6 +1,7 @@
 <?php
 
 use App\Marca;
+use App\Producto;
 use App\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -52,26 +53,34 @@ Route::group(['prefix' => 'datatables'], function () {
     })->name('datatables.marcas');
 
     Route::get('/productos', function () {
-        return datatables()
-                ->eloquent(App\Producto::query()->with('marca'))
-                ->addColumn('btn', 'productos.actions')
-                ->rawColumns(['btn'])
-                ->editColumn('marca.proveedor_id', function ($product){
-                    $proveedor = Proveedor::find($product->marca->proveedor_id);
 
-                    if(isset($proveedor)){
-                        return $proveedor->name;
-                    }else{
-                        return '-';
-                    }
-                })
+		$query = Producto::join('productos_proveedores', 'producto_id', '=', 'productos.id')
+							->join('proveedores', 'proveedores.id', '=', 'proveedor_id')
+							->select(['productos.id', 'productos.name', 'productos.kg',
+									'productos.discount_percent', 'proveedor_id',
+									'proveedores.name as proveedor', 'productos.marca_id',
+									'productos_proveedores.price']);
+
+        return datatables()
+                ->eloquent($query)
+                ->addColumn('btn', 'productos.actions')
+				->rawColumns(['btn'])
+				->editColumn('marca', function($model){
+					$marca = Marca::find($model->marca_id);
+
+					if($marca){
+						return $marca->name;
+					}else{
+						return '-';
+					}
+				})
                 ->editColumn('format_name', function($product){
 
-                    if($product->kilograms > 0){
-                        return $product->name.' x'.$product->kilograms.'Kg';
+                    if($product->kg > 0){
+                        return $product->name.' x'.$product->kg.'Kg';
                     }
                     return $product->name;
                 })
-                ->toJson();
+                ->make(true);
     })->name('datatables.productos');
 });

@@ -33,8 +33,9 @@
                             <th>#</th>
                             <th width="10%">Proveedor</th>
                             <th width="10%">Marca</th>
-                            <th width="20%">Nombre</th>
-                            <th>Precio</th>
+							<th width="20%">Nombre</th>
+                            <th>Precio facturado</th>
+                            <th>Precio real</th>
                             <th>Precio Kg</th>
                             <th>Precio minorista</th>
                             <th>Precio reventa</th>
@@ -105,7 +106,7 @@
 			} );
 
             let table = $('#productos-table').DataTable({
-                "order": [[ 1, "asc" ]],
+                "order": [[ 3, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
@@ -115,9 +116,15 @@
                             return '#'+data.padStart(6, '0')
                         }
                     },
-                    {data: 'marca.proveedor_id'},
-                    {data: 'marca.name'},
+                    {data: 'proveedor'},
+                    {data: 'marca'},
                     {data: 'format_name'},
+					{
+						data: 'price',
+                        render: function (data, type, row){
+                            return '$'+Number(data).toFixed(2)
+                        }	
+					},
                     {
                         data: 'base_price',
                         render: function (data, type, row){
@@ -127,7 +134,11 @@
                     {
                         data: 'kg_price',
                         render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
+                            if(data > 0){
+								return '$'+Number(data).toFixed(2)
+							}else{
+								return '-'
+							}
                         }
                     },
                     {
@@ -155,7 +166,7 @@
 						var column = this;
 						var input = document.createElement("input");
 						$(input).appendTo($(column.footer()).empty())
-						.on('change', function () {
+						.on('keyup', function () {
 							column.search($(this).val(), false, false, true).draw();
 						});
 					});
