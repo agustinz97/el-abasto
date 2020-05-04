@@ -16,10 +16,8 @@ class CreateMarcasTable extends Migration
         Schema::create('marcas', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->bigInteger('proveedor_id')->unsigned()->nullable();
             $table->timestamps();
 
-            $table->foreign('proveedor_id')->references('id')->on('proveedores');
         });
     }
 
