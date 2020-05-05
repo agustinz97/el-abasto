@@ -20,14 +20,13 @@
                 <table id="productos-table" class="table table-hover table-striped nowrap" style="width:100%">
                     <thead>
                         <tr>
-							<th>#</th>
-                            <th width="10%">Proveedor</th>
+                            <th>#</th>
                             <th width="10%">Marca</th>
 							<th width="20%">Nombre</th>
-                            <th>Precio facturado</th>
-                            <th>Descuento IVA</th>
-                            <th>Flete</th>
-                            <th>Precio de compra</th>
+                            <th>Precio Kg</th>
+                            <th>Precio minorista</th>
+                            <th>Precio reventa</th>
+                            <th>Precio mayorista</th>
                         </tr>
 					</thead>
 					{{-- <tfoot>
@@ -103,28 +102,36 @@
                             return '#'+data.padStart(6, '0')
                         }
                     },
-                    {data: 'proveedor'},
                     {data: 'marca'},
                     {data: 'format_name'},
                     {
-						data: 'precio_factura',
-						render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
+                        data: 'kg_price',
+                        render: function (data, type, row){
+                            if(data > 0){
+								return '$'+Number(data).toFixed(2)
+							}else{
+								return '-'
+							}
                         }
-					},
-                    {data: 'discount'},
+                    },
                     {
-						data: 'flete',
-						render: function (data, type, row){
+                        data: 'retail_price',
+                        render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }
-					},
+                    },
                     {
-						data: 'precio_compra',
-						render: function (data, type, row){
+                        data: 'resale_price',
+                        render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }
-					}
+                    },
+                    {
+                        data: 'wholesale_price',
+                        render: function (data, type, row){
+                            return '$'+Number(data).toFixed(2)
+                        }
+                    },
                 ] ,
 				/* initComplete: function () {
 					this.api().columns().every(function () {

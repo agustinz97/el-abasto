@@ -88,8 +88,11 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('productos.index') }}">
-                                        Listado
+                                    <a class="dropdown-item" href="{{ route('index') }}">
+                                        Lista de precios
+									</a>
+									<a class="dropdown-item" href="{{ route('productos.index') }}">
+                                        Administrar
                                     </a>
                                     <a class="dropdown-item" href="{{ route('productos.new') }}">
                                         Nuevo
