@@ -19,7 +19,7 @@ class ProductosController extends Controller
     public function new(){
         return view('productos.new')->with([
 			'marcas' => Marca::all(),
-			'proveedores' => Proveedor::all()
+			'proveedores' => Proveedor::all(),
         ]);
     }
 
@@ -36,7 +36,7 @@ class ProductosController extends Controller
     public function create(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
+            'name' => 'required|string|unique:productos,name',
             'kg' => 'nullable|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
@@ -53,9 +53,8 @@ class ProductosController extends Controller
 
         $producto = new Producto();
         $producto->name = $request->input('name');
-        $producto->kg = $request->input('kg') || 0;
-        $producto->discount_percent = $request->input('discount');
-        $producto->stock = $request->input('stock') || 0;
+        $producto->kg = $request->input('kg') ? $request->input('kg') : 0;
+        $producto->stock = $request->input('stock') ? $request->input('stock') : 0;
         $producto->img_path = '';
 		
 
@@ -64,13 +63,15 @@ class ProductosController extends Controller
 			$producto->save();
 		
 			$producto->proveedores()->attach($request->input('proveedor'), [
-				'price' => $request->input('price')]
-			);
+					'price' => $request->input('price'),
+					'discount' => $request->input('discount') ? $request->input('discount') : 12,
+				]);
 
             return redirect()->back()->with([
                 'success' => 'Producto agregado correctamente'
             ]);
         }catch(Exception $e){
+			dd($e->getMessage());
             return redirect()->back()->with([
                 'error' => 'Algo salió mal'
             ])->withInput($request->all());

@@ -14,16 +14,6 @@
             <div class="col-md-4">
                 <h5>Listado de productos</h5>
             </div>
-            <div class="col-md-8">
-                <a href="{{route('productos.new')}}" class="btn btn-success float-right">
-                    Nuevo +
-                </a>
-                <button 
-                    class="btn btn-primary float-right mr-2" 
-                    data-toggle="modal" data-target="#exampleModal">
-                    Actualizar precios $
-                </button>
-            </div>
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
@@ -31,26 +21,22 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th width="10%">Proveedor</th>
                             <th width="10%">Marca</th>
 							<th width="20%">Nombre</th>
-                            <th>Precio facturado</th>
-                            <th>Precio real</th>
                             <th>Precio Kg</th>
                             <th>Precio minorista</th>
                             <th>Precio reventa</th>
                             <th>Precio mayorista</th>
-                            <th width="10%">&nbsp;</th>
                         </tr>
 					</thead>
-					<tfoot>
+					{{-- <tfoot>
 						<tr>
 							<th>código</th>
 							<th>proveedor</th>
 							<th>marca</th>
 							<th>nombre</th>
 						</tr>
-					</tfoot>
+					</tfoot> --}}
                 </table>
             </div>
         </div>
@@ -106,7 +92,7 @@
 			} );
 
             let table = $('#productos-table').DataTable({
-                "order": [[ 3, "asc" ]],
+                "order": [[ 2, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
@@ -116,21 +102,8 @@
                             return '#'+data.padStart(6, '0')
                         }
                     },
-                    {data: 'proveedor'},
                     {data: 'marca'},
                     {data: 'format_name'},
-					{
-						data: 'price',
-                        render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
-                        }	
-					},
-                    {
-                        data: 'base_price',
-                        render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
-                        }
-                    },
                     {
                         data: 'kg_price',
                         render: function (data, type, row){
@@ -159,9 +132,8 @@
                             return '$'+Number(data).toFixed(2)
                         }
                     },
-                    {data: 'btn'},
                 ] ,
-				initComplete: function () {
+				/* initComplete: function () {
 					this.api().columns().every(function () {
 						var column = this;
 						var input = document.createElement("input");
@@ -170,7 +142,7 @@
 							column.search($(this).val(), false, false, true).draw();
 						});
 					});
-				}
+				} */
             });
         } );
     </script>

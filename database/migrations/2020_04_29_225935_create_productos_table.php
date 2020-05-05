@@ -15,8 +15,7 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->float('discount_percent');
+            $table->string('name')->unique();
             $table->string('img_path')->nullable();
 			$table->float('stock')->default(0);
 			$table->integer('kg')->default(0);

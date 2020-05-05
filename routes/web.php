@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('productos.index');
 });
 
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['prefix' => 'proveedores'], function () {
         Route::get('/', 'ProveedoresController@index')->name('proveedores.index');
         Route::get('/new', 'ProveedoresController@new')->name('proveedores.new');

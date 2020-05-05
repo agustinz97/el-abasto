@@ -67,7 +67,7 @@
 							</div>
 
                             <div class="row">
-                                <div class="col-md-8 col-sm-12">
+                                <div class="col-md-6 col-sm-12">
                                     <label for="name">Nombre del producto</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -78,10 +78,10 @@
                                             class="form-control" 
                                             id="name" name="name"
                                             value="{{old('name')}}"
-                                            >
+											>
                                     </div>
-                                </div>
-                                <div class="col-md-3 col-sm-12">
+								</div>
+								<div class="col-md-3 col-sm-12">
                                     <label for="kg">Kg</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-apend">
@@ -95,9 +95,10 @@
                                             >
                                     </div>
                                 </div>
-                            </div>
+							</div>
 
                             <div class="row">
+								
                                 <div class="col-md-4 col-sm-12">
                                     <label for="price">Precio de compra</label>
                                     <div class="input-group mb-3">

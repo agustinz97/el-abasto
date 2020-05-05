@@ -19,6 +19,10 @@ class Producto extends Model
 		return $this->belongsToMany('App\Proveedor', 'productos_proveedores')->withPivot('price');
 	}
 
+	public function getNameAttribute($value){
+		return ucfirst($value);
+	}
+
     public function getBasePriceAttribute(){
 		$prov = $this
 					->proveedores()

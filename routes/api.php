@@ -32,7 +32,10 @@ Route::group(['prefix' => 'marcas'], function () {
 
 Route::group(['prefix' => 'productos'], function () {
     Route::delete('/{id}', 'ProductosController@delete')->name('productos.delete');
-    Route::post('/actualizar-precios', 'ProductosController@updatePrices')->name('productos.updatePrices');
+	Route::post('/actualizar-precios', 'ProductosController@updatePrices')->name('productos.updatePrices');
+	Route::get('/', function(){
+		return Producto::all();
+	})->name('productosApi.all');
 });
 
 Route::group(['prefix' => 'datatables'], function () {
@@ -54,12 +57,7 @@ Route::group(['prefix' => 'datatables'], function () {
 
     Route::get('/productos', function () {
 
-		$query = Producto::join('productos_proveedores', 'producto_id', '=', 'productos.id')
-							->join('proveedores', 'proveedores.id', '=', 'proveedor_id')
-							->select(['productos.id', 'productos.name', 'productos.kg',
-									'productos.discount_percent', 'proveedor_id',
-									'proveedores.name as proveedor', 'productos.marca_id',
-									'productos_proveedores.price']);
+		$query = Producto::query()->with(['marca']);
 
         return datatables()
                 ->eloquent($query)
