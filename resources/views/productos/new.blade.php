@@ -38,7 +38,8 @@
 											class="btn btn-primary ml-2" 
 											data-toggle="modal" data-target="#modal-proveedor"
 											id="btnProveedor"
-											type="button">
+											type="button"
+											tabindex="-1">>
 											Nuevo +
 										</button>
 									</div>
@@ -59,7 +60,8 @@
 											class="btn btn-primary ml-2" 
 											data-toggle="modal" data-target="#modal-marca"
 											id="btnMarca"
-											type="button">
+											type="button"
+											tabindex="-1">
 											Nueva +
 										</button>
 									</div>

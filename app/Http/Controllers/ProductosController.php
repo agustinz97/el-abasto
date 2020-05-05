@@ -67,9 +67,11 @@ class ProductosController extends Controller
 					'discount' => $request->input('discount') ? $request->input('discount') : 12,
 				]);
 
-            return redirect()->back()->with([
-                'success' => 'Producto agregado correctamente'
-            ]);
+			return redirect()->back()
+							->with([
+								'success' => 'Producto agregado correctamente'
+							])
+							->withInput($request->only(['marca', 'proveedor']));
         }catch(Exception $e){
             return redirect()->back()->with([
                 'error' => 'Algo salió mal'
