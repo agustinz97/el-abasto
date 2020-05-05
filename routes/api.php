@@ -61,14 +61,16 @@ Route::group(['prefix' => 'datatables'], function () {
 							->join('proveedores', 'proveedores.id', '=', 'proveedor_id')
 							->select(['productos.id', 'productos.name', 
 							'productos_proveedores.price as precio_factura', 
-							'proveedores.name as proveedor', 'discount', 'productos.kg']);
+							'proveedores.name as proveedor', 'discount', 'productos.kg',
+							'productos.marca_id as marca']);
 
         return datatables()
                 ->eloquent($query)
                 ->addColumn('btn', 'productos.actions')
 				->rawColumns(['btn'])
 				->editColumn('marca', function($model){
-					$marca = Marca::find($model->marca_id);
+
+					$marca = Marca::find($model->marca);
 
 					if($marca){
 						return $marca->name;

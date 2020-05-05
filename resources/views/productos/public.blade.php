@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col-md-4">
-                <h5>Listado de productos</h5>
+                <h5>Lista de precios pública</h5>
             </div>
         </div>
         <div class="row">
