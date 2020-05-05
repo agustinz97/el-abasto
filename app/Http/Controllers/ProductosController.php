@@ -36,11 +36,11 @@ class ProductosController extends Controller
     public function create(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|unique:productos,name',
             'kg' => 'nullable|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
-            'marca' => 'nullable|numeric|exists:marcas,id',
+			'marca' => 'nullable|numeric|exists:marcas,id',
+            'name' => 'required|string|unique:productos,name,NULL,id,marca_id,'.$request->input('marca').',kg,'.$request->input('kg'),
             'proveedor' => '|numeric|exists:proveedores,id',
             'stock' => 'nullable|numeric'
 		]);
@@ -71,7 +71,6 @@ class ProductosController extends Controller
                 'success' => 'Producto agregado correctamente'
             ]);
         }catch(Exception $e){
-			dd($e->getMessage());
             return redirect()->back()->with([
                 'error' => 'Algo salió mal'
             ])->withInput($request->all());
