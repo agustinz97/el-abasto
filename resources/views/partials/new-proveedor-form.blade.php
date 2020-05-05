@@ -9,7 +9,7 @@
 			<input 
 				type="text" 
 				class="form-control" 
-				id="name" name="name"
+				id="name-proveedor" name="name"
 				value="{{old('name')}}"
 				required>
 		</div>

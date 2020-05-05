@@ -39,7 +39,7 @@
 											data-toggle="modal" data-target="#modal-proveedor"
 											id="btnProveedor"
 											type="button"
-											tabindex="-1">>
+											tabindex="-1">
 											Nuevo +
 										</button>
 									</div>
@@ -182,17 +182,30 @@
 	<!-- Modal Nuevo Proveedor -->
     <div class="modal fade" id="modal-proveedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Crear proveedor</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @include('partials.new-proveedor-form')
-            </div>
-        </div>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Crear proveedor</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					@include('partials.new-proveedor-form')
+				</div>
+			</div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+	<script>
+
+		$('#modal-marca').on('shown.bs.modal', function () {
+			$('#name-marca').focus();
+		})
+
+		$('#modal-proveedor').on('shown.bs.modal', function () {
+			$('#name-proveedor').focus();
+		})
+	</script>
 @endsection
