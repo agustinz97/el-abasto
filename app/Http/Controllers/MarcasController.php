@@ -59,7 +59,7 @@ class MarcasController extends Controller
 	
 	public function datatables(){
 
-		$query = App\Marca::query();
+		$query = Marca::query();
 
 		return datatables()
                 ->eloquent($query)

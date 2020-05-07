@@ -16,8 +16,6 @@
                         Nuevo proveedor
                     </div>
                     <div class="card-body">	
-						<div class="alert alert-danger" style="display: none" id="errors">
-						</div>
 						
 						@include('partials.new-proveedor-form')
 						

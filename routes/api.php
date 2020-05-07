@@ -28,6 +28,7 @@ Route::group(['prefix' => 'proveedores'], function () {
 });
 
 Route::group(['prefix' => 'marcas'], function () {
+	Route::post('/', 'MarcasController@create')->name('marcas.create');
     Route::delete('/{id}', 'MarcasController@delete')->name('marcas.delete');
 });
 

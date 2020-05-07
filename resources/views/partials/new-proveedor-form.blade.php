@@ -1,3 +1,5 @@
+<div class="alert alert-danger" style="display: none" id="errors">
+</div>
 <form action="#" id="newProveedor-form" method="POST">
 	@csrf
 	<div class="form-group">

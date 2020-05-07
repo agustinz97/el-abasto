@@ -15,9 +15,8 @@
                 <table id="marcas-table" class="table table-hover table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th width="10%">#</th>
                             <th>Nombre</th>
-                            <th>proveedor</th>
                             <th width="10%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -36,10 +35,6 @@
                 "columns": [
                     {data: 'id'},
                     {data: 'name'},
-                    {
-                        data: 'proveedor.name',
-                        defaultContent: '-'
-                    },
                     {data: 'btn'},
                 ] 
             });
