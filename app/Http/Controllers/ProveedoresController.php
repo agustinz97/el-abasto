@@ -36,31 +36,51 @@ class ProveedoresController extends Controller
     public function create(Request $request){
 
         $validator = Validator::make($request->all(),[
-            'name' => 'required|string|unique:proveedores,name',
+            'nombre' => 'required|string|unique:proveedores,name',
             'email' => 'nullable|string|unique:proveedores,email',
-            'phone' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10'
+            'telefono' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10'
         ]);
 
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+			/* return redirect()->back()->withErrors($validator)->withInput($request->all()); */
+			return response()->json($validator->errors(), 422 );
         }
 
         $proveedor = new Proveedor();
 
-        $proveedor->name = $request->input('name');
+        $proveedor->name = $request->input('nombre');
         $proveedor->email = $request->input('email');
-        $proveedor->phone = $request->input('phone');
+        $proveedor->phone = $request->input('telefono');
         
         try{
             $proveedor->save();
-            return redirect()->back()->with([
+            /* return redirect()->back()->with([
                 'success' => 'Proveedor guardado con éxito'
-            ]);
+			]); */
+			
+			return response()->json($proveedor, 201);
+
         }catch(Exception $ex){
-            return redirect()->back()->with([
+            /* return redirect()->back()->with([
                 'error' => 'Algo salió mal. Intente de nuevo mas tarde'
-            ]);
+			]); */
+			
+			if (App::environment('local')) {
+				return response()->json($ex->getMessage(), 500);
+			}
+			return response()->json('Something wrong', 500);
         }
 
-    }
+	}
+	
+	public function datatables(){
+
+		$query = Proveedor::query();
+		
+		return datatables()
+                ->eloquent($query)
+                ->addColumn('btn', 'proveedores.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+	}
 }

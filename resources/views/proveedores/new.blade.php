@@ -2,23 +2,22 @@
 
 @section('content')
     <div class="container">
+		<div class="row mb-3">
+			<div class="col">
+				<a href="{{route('proveedores.index')}}" class="btn btn-primary float-right">
+					Volver al Listado
+				</a>
+			</div>
+		</div>
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         Nuevo proveedor
                     </div>
-                    <div class="card-body">
-                        @if (Session::has('success'))
-                            <div class="alert alert-success">
-                                {{Session::get('success')}}
-                            </div>
-                        @endif
-                        @if (Session::has('error'))
-                            <div class="alert alert-danger">
-                                {{Session::get('error')}}
-                            </div>
-						@endif
+                    <div class="card-body">	
+						<div class="alert alert-danger" style="display: none" id="errors">
+						</div>
 						
 						@include('partials.new-proveedor-form')
 						
@@ -32,8 +31,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-
 @endsection

@@ -25,7 +25,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['prefix' => 'proveedores'], function () {
         Route::get('/', 'ProveedoresController@index')->name('proveedores.index');
         Route::get('/new', 'ProveedoresController@new')->name('proveedores.new');
-        Route::post('/', 'ProveedoresController@create')->name('proveedores.create');
         Route::post('/{id}', 'ProveedoresController@show')->name('proveedores.show');
     });
 

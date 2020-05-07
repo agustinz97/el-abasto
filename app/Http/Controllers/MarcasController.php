@@ -55,5 +55,16 @@ class MarcasController extends Controller
 
         return response()->json('deleted', 204);
 
-    }
+	}
+	
+	public function datatables(){
+
+		$query = App\Marca::query();
+
+		return datatables()
+                ->eloquent($query)
+                ->addColumn('btn', 'marcas.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+	}
 }
