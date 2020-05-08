@@ -27,7 +27,8 @@
                             <th>Precio facturado</th>
                             <th>Descuento IVA</th>
                             <th>Flete</th>
-                            <th>Precio de compra</th>
+							<th>Precio de compra</th>
+							<th>&nbsp;</th>
                         </tr>
 					</thead>
 					{{-- <tfoot>
@@ -93,7 +94,7 @@
 			} );
 
             let table = $('#productos-table').DataTable({
-                "order": [[ 2, "asc" ]],
+                "order": [[ 3, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
@@ -112,7 +113,12 @@
                             return '$'+Number(data).toFixed(2)
                         }
 					},
-                    {data: 'discount'},
+                    {
+						data: 'discount',
+						render: function (data, type, row){
+                            return '$'+Number(data).toFixed(2)
+                        }
+					},
                     {
 						data: 'flete',
 						render: function (data, type, row){
@@ -120,10 +126,13 @@
                         }
 					},
                     {
-						data: 'precio_compra',
+						data: 'base_price',
 						render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }
+					},
+					{
+						data: 'btn'
 					}
                 ] ,
 				/* initComplete: function () {

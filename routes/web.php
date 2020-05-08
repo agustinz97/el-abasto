@@ -37,7 +37,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['prefix' => 'productos'], function () {
         Route::get('/', 'ProductosController@index')->name('productos.index');
         Route::get('/new', 'ProductosController@new')->name('productos.new');
-        Route::post('/', 'ProductosController@create')->name('productos.create');
         Route::get('/{id}', 'ProductosController@show')->name('productos.show');
     });
 });

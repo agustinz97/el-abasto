@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="container">
+		<div class="row mb-3">
+			<div class="col">
+				<a href="{{route('productos.index')}}" class="btn btn-primary float-right">
+					Volver al listado
+				</a>
+			</div>
+		</div>
         <div class="row">
             <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="card">
@@ -9,17 +16,9 @@
                         Nuevo producto
                     </div>
                     <div class="card-body">
-                        @if (Session::has('success'))
-                            <div class="alert alert-success">
-                                {{Session::get('success')}}
-                            </div>
-                        @endif
-                        @if (Session::has('error'))
-                            <div class="alert alert-danger">
-                                {{Session::get('error')}}
-                            </div>
-                        @endif
-                        <form action="{{route('productos.create')}}" method="POST">
+						<div class="alert alert-danger" style="display: none" id="errors-producto">
+						</div>
+                        <form action="{{route('productos.create')}}" method="POST" id="newProducto-form">
 							@csrf
 							
 							<div class="row">
@@ -27,7 +26,7 @@
                                     <label for="marca">Proveedor</label>
                                     <div class="input-group mb-3">
 										<select class="custom-select" required id="proveedor" name="proveedor">
-											<option value="0">Seleccione el proveedor</option>
+											<option value="">Seleccione el proveedor</option>
 											@foreach($proveedores as $proveedor)
 											<option value="{{$proveedor->id}}" {{old('proveedor') == $proveedor->id ? 'selected' : ''}}>
 												{{$proveedor->name}}
@@ -72,63 +71,53 @@
                                 <div class="col-md-6 col-sm-12">
                                     <label for="name">Nombre del producto</label>
                                     <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Nombre</span>
-                                        </div>
                                         <input 
                                             type="text" 
                                             class="form-control" 
                                             id="name" name="name"
-                                            value="{{old('name')}}"
-											>
+											required>
                                     </div>
 								</div>
 								<div class="col-md-3 col-sm-12">
                                     <label for="kg">Kg</label>
                                     <div class="input-group mb-3">
-                                        <div class="input-group-apend">
-                                            <span class="input-group-text">Kg</span>
-                                        </div>
                                         <input 
-                                            type="text" 
+                                            type="number" step="0.001"
                                             class="form-control" 
                                             id="kg" name="kg"
-                                            value="{{old('kg')}}"
-                                            >
+                                            placeholder="0">
                                     </div>
-                                </div>
+								</div>
 							</div>
 
-                            <div class="row">
+							<div class="row">
 								
-                                <div class="col-md-4 col-sm-12">
+								<div class="col-md-3 col-sm-12">
+                                    <label for="units">Unidades por bulto</label>
+                                    <div class="input-group mb-3">
+                                        <input 
+                                            type="number" step="1"
+                                            class="form-control" 
+											id="units" name="units"
+											placeholder="1"
+                                            >
+                                    </div>
+								</div>
+								<div class="col-md-3 col-sm-12">
                                     <label for="price">Precio de compra</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
                                         <input 
-                                            type="text" 
+                                            type="number" step="0.1"
                                             class="form-control" 
                                             id="price" name="price"
-                                            value="{{old('price')}}"
-                                            >
+											required
+											>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-sm-12">
-                                    <label for="discount">Descuento</label>
-                                    <div class="input-group mb-3">
-                                        <input 
-                                            type="text" 
-                                            class="form-control" 
-                                            id="discount" name="discount"
-                                            value="{{old('discount')}}">
-                                        <div class="input-group-append">
-                                          <span class="input-group-text">%</span>
-                                        </div>
-                                      </div>
-                                </div>
-                            </div>
+							</div>
 
                             {{-- <div class="row">
 
@@ -146,12 +135,7 @@
                                       </div>
                                 </div>
                             </div> --}}
-
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    {{$errors->first()}}
-                                </div>
-                            @endif
+							
                             <div class="form-group">
                                 <button class="btn btn-success float-right">Guardar</button>
                             </div>
@@ -206,6 +190,71 @@
 
 		$('#modal-proveedor').on('shown.bs.modal', function () {
 			$('#name-proveedor').focus();
+		})
+	</script>
+
+	<script>
+		const formProducto = document.querySelector('#newProducto-form')
+		const errorsProducto = document.querySelector('#errors-producto')
+
+		formProducto.addEventListener('submit', async function(evt){
+			evt.preventDefault()
+			
+			const url = route('productos.create')
+			const data = {
+				proveedor: formProducto['proveedor'].value,
+				marca: formProducto['marca'].value,
+				nombre: formProducto['name'].value,
+				unidades: formProducto['units'].value,
+				kg: formProducto['kg'].value,
+				precio: formProducto['price'].value,
+			}
+
+			try{
+				
+				const res = await axios.post(url, data);
+
+				Swal.fire({
+					title: 'Producto agregado',
+					icon: 'success',
+					showConfirmButton: false,
+					timer: 1000
+				})
+
+				this.reset()
+				errorsProducto.innerHTML = ''
+				errorsProducto.style.display = 'none'
+				this['proveedor'].value = data.proveedor
+				this['marca'].value = data.marca
+			}catch(error){
+				if(error.response.status === 500){
+					Swal.fire({
+						title: 'Algo salió mal.',
+						text: 'Intente de nuevo mas tarde.',
+						icon: 'error',
+					})
+				}else if(error.response.status === 422){
+
+					const errors = Object.values(error.response.data)
+
+					errorsProducto.innerHTML = '';
+
+					const ul = document.createElement('ul')
+					ul.classList.add('mb-0')
+					
+					errors.forEach(error => {
+						const li = document.createElement('li')
+						li.textContent = error
+
+						ul.appendChild(li)
+					})
+
+					errorsProducto.appendChild(ul)
+					errorsProducto.style.display = 'block'
+					console.log('hola mundo')
+				}
+			}
+
 		})
 	</script>
 @endsection

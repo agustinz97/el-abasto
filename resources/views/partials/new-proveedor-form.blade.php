@@ -1,4 +1,4 @@
-<div class="alert alert-danger" style="display: none" id="errors">
+<div class="alert alert-danger" style="display: none" id="errors-proveedor">
 </div>
 <form action="#" id="newProveedor-form" method="POST">
 	@csrf
@@ -54,10 +54,10 @@
 				<div class="input-group mb-3">
 
 					<input 
-						type="text" 
+						type="number" step="0.1"
 						class="form-control" 
 						id="discount" name="discount"
-						>
+						placeholder="0">
 					<div class="input-group-append">
 						<span class="input-group-text">%</span>
 					</div>
@@ -72,10 +72,10 @@
 						<span class="input-group-text">$</span>
 					</div>
 					<input 
-						type="text" 
+						type="number" step="0.1"
 						class="form-control" 
 						id="shipping" name="shipping"
-						>
+						placeholder="0">
 				</div>
 			</div>
 		</div>
@@ -88,6 +88,7 @@
 <script>
 
 	const formProveedor = document.querySelector('#newProveedor-form')
+	const errorsProveedor = document.querySelector('#errors-proveedor')
 
 	formProveedor.addEventListener('submit', async function (evt) {
 		evt.preventDefault()
@@ -112,7 +113,8 @@
 			})
 
 			this.reset()
-			document.querySelector('#errors').innerHTML = ''
+			errorsProveedor.innerHTML = ''
+			errorsProveedor.style.display = 'none'
 		}catch(error){
 
 			if(error.response.status === 500){
@@ -124,9 +126,8 @@
 			}else if(error.response.status === 422){
 
 				const errors = Object.values(error.response.data)
-				const errorsBag = document.querySelector('#errors')
 
-				errorsBag.innerHTML = '';
+				errorsProveedor.innerHTML = '';
 
 				const ul = document.createElement('ul')
 				ul.classList.add('mb-0')
@@ -138,8 +139,8 @@
 					ul.appendChild(li)
 				})
 
-				errorsBag.appendChild(ul)
-				errorsBag.style.display = 'block'
+				errorsProveedor.appendChild(ul)
+				errorsProveedor.style.display = 'block'
 
 			}
 

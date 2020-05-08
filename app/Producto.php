@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $table = 'productos';
-    public $appends = ['base_price', 'kg_price', 'retail_price', 
-					'wholesale_price', 'resale_price', 'shipping'];
-	private $SHIPPING_COST = 55;
+    public $appends = ['base_price','kg_price', 'retail_price', 
+					'wholesale_price', 'resale_price', 'format_name'];
 
     public function marca(){
         return $this->belongsTo('App\Marca');
@@ -23,8 +22,17 @@ class Producto extends Model
 		return ucfirst($value);
 	}
 
-	public function getShippingAttribute(){
-		return $this->SHIPPING_COST;
+	public function getFormatNameAttribute(){
+		$name = $this->name;
+		if($this->units > 0){
+			$name.=' '.$this->units.'u.';
+		}
+		if($this->kg >= 1){
+			$name.=' x'.$this->kg.'Kg';
+		}elseif($this->kg > 0){
+			$name.=' x'.($this->kg).'g';
+		}
+		return $name;
 	}
 
     public function getBasePriceAttribute(){
@@ -78,4 +86,21 @@ class Producto extends Model
         return $this->base_price + $profit;
     }
 
+	public function basePriceProveedor($proveedor_id = 0){
+
+		$proveedor = $this->proveedores()->wherePivot('proveedor_id', '=', $proveedor_id)->first();
+
+		if($proveedor){
+
+			$price = $proveedor->pivot->price;
+			$discount_percent = $proveedor->discount_percent;
+			$shipping = $proveedor->shipping;
+
+			$discount = $price * $discount_percent / 100;
+
+			return $price - $discount + $shipping;
+		}
+
+		return 0;
+	}
 }

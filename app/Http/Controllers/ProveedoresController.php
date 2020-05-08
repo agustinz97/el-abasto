@@ -53,8 +53,8 @@ class ProveedoresController extends Controller
         $proveedor->name = $request->input('nombre');
         $proveedor->email = $request->input('email');
         $proveedor->phone = $request->input('telefono');
-        $proveedor->discount_percent = $request->input('descuento');
-        $proveedor->shipping = $request->input('flete');
+        $proveedor->discount_percent = $request->input('descuento') ?? 0;
+        $proveedor->shipping = $request->input('flete') ?? 0;
         
         try{
             $proveedor->save();

@@ -19,7 +19,8 @@ class CreateProductosTable extends Migration
             $table->string('img_path')->nullable();
 			$table->float('stock')->default(0);
 			$table->float('kg')->default(0);
-            $table->bigInteger('marca_id')->unsigned()->nullable();
+			$table->bigInteger('marca_id')->unsigned()->nullable();
+			$table->integer('units')->unsigned()->default(1);
             $table->timestamps();
 
 			$table->foreign('marca_id')->references('id')->on('marcas');

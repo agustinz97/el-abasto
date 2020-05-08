@@ -37,45 +37,40 @@ class ProductosController extends Controller
 
         $validator = Validator::make($request->all(), [
             'kg' => 'nullable|numeric',
-            'price' => 'required|numeric',
-            'discount' => 'nullable|numeric',
+			'precio' => 'required|numeric|min:1',
+			'unidades' => 'nullable|numeric',
 			'marca' => 'nullable|numeric|exists:marcas,id',
-            'name' => 'required|string|unique:productos,name,NULL,id,marca_id,'.$request->input('marca').',kg,'.$request->input('kg'),
+            'nombre' => 'required|string|unique:productos,name,NULL,id,marca_id,'.$request->input('marca').',kg,'.$request->input('kg'),
             'proveedor' => '|numeric|exists:proveedores,id',
             'stock' => 'nullable|numeric'
 		]);
 		
-		/* dd($request->input('marca')); */
-
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+			return response()->json($validator->errors(), 422);
         }
 
         $producto = new Producto();
-        $producto->name = $request->input('name');
-        $producto->kg = $request->input('kg') ? $request->input('kg') : 0;
-        $producto->stock = $request->input('stock') ? $request->input('stock') : 0;
+        $producto->name = $request->input('nombre');
+        $producto->kg = $request->input('kg') ?? 0;
+        $producto->units = $request->input('unidades') ?? 0;
+        $producto->stock = $request->input('stock') ?? 0;
         $producto->img_path = '';
-		
 
         try{
 			$producto->marca()->associate($request->input('marca'));
 			$producto->save();
 		
 			$producto->proveedores()->attach($request->input('proveedor'), [
-					'price' => $request->input('price'),
-					'discount' => $request->input('discount') ? $request->input('discount') : 12,
+					'price' => $request->input('precio'),
 				]);
 
-			return redirect()->back()
-							->with([
-								'success' => 'Producto agregado correctamente'
-							])
-							->withInput($request->only(['marca', 'proveedor']));
-        }catch(Exception $e){
-            return redirect()->back()->with([
-                'error' => 'Algo salió mal'
-            ])->withInput($request->all());
+			return response()->json($producto, 201);
+
+        }catch(Exception $ex){
+            if (App::environment('local')) {
+				return response()->json($ex->getMessage(), 500);
+			}
+			return response()->json('Something wrong', 500);
         }
 
     }
@@ -118,10 +113,11 @@ class ProductosController extends Controller
 	public function datatables(){
 		$query = Producto::join('productos_proveedores', 'producto_id', '=', 'productos.id')
 							->join('proveedores', 'proveedores.id', '=', 'proveedor_id')
-							->select(['productos.id', 'productos.name', 
+							->select(['productos.id', 'productos.name', 'proveedores.id as proveedor_id', 
 							'productos_proveedores.price as precio_factura', 
-							'proveedores.name as proveedor', 'discount', 'productos.kg',
-							'productos.marca_id as marca']);
+							'proveedores.name as proveedor', 'proveedores.discount_percent as discount',
+							'productos.kg', 'productos.marca_id as marca', 
+							'proveedores.shipping as flete', 'productos.units']);
 
         return datatables()
                 ->eloquent($query)
@@ -137,25 +133,8 @@ class ProductosController extends Controller
 						return '-';
 					}
 				})
-				->editColumn('discount', function($model){
-					return $model->discount.'%';
-				})
-				->editColumn('flete', function($model){
-					return $model->shipping;
-				})
-                ->editColumn('format_name', function($product){
-
-                    if($product->kg > 0){
-                        return $product->name.' x'.$product->kg.'Kg';
-                    }
-                    return $product->name;
-				})
-				->editColumn('precio_compra', function($model){
-					
-					$desc = $model->precio_factura * $model->discount / 100;
-
-					return $model->precio_factura - $desc + 55;
-
+				->editColumn('base_price', function($product){
+					return $product->basePriceProveedor($product->proveedor_id);
 				})
                 ->make(true);
 	}

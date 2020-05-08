@@ -1,4 +1,4 @@
-<div class="alert alert-danger" style="display: none" id="errors">
+<div class="alert alert-danger" style="display: none" id="errors-marca">
 </div>
 <form action="#" method="POST" id="newMarca-form">
 	@csrf
@@ -20,6 +20,7 @@
 <script>
 
 	const formMarca = document.querySelector('#newMarca-form')
+	const errorsBag = document.querySelector('#errors-marca')
 
 	formMarca.addEventListener('submit', async function (evt) {
 		evt.preventDefault()
@@ -39,6 +40,8 @@
 				timer: 1000
 			})
 
+			errorsBag.style.display = 'none'
+			errorsBag.innerHTML = ''
 			this.reset()
 		}catch(error){
 			console.log(error.response.data)
@@ -52,7 +55,6 @@
 			}else if(error.response.status === 422){
 
 				const errors = Object.values(error.response.data)
-				const errorsBag = document.querySelector('#errors')
 
 				errorsBag.innerHTML = '';
 
