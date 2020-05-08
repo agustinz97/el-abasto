@@ -2,37 +2,82 @@
 </div>
 <form action="#" id="newProveedor-form" method="POST">
 	@csrf
-	<div class="form-group">
-		<label for="name">Nombre del proveedor</label>
-		<div class="input-group mb-3">
-			<input 
-				type="text" 
-				class="form-control" 
-				id="name-proveedor" name="name"
-				value="{{old('name')}}"
-				required>
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="name">Nombre del proveedor</label>
+				<div class="input-group mb-3">
+					<input 
+						type="text" 
+						class="form-control" 
+						id="name-proveedor" name="name"
+						value="{{old('name')}}"
+						required>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="form-group">
-		<label for="email">Correo electrónico</label>
-		<div class="input-group mb-3">
-			<input 
-				type="email" 
-				class="form-control" 
-				id="email" name="email"
-				value="{{old('email')}}"
-				>
+
+	<div class="row">
+		<div class="col-lg-7 col-md-12 col-sm-12">
+			<div class="form-group">
+				<label for="email">Correo electrónico</label>
+				<div class="input-group mb-3">
+					<input 
+						type="email" 
+						class="form-control" 
+						id="email" name="email"
+						value="{{old('email')}}"
+						>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-5 col-md-12 col-sm-12">
+			<div class="form-group">
+				<label for="phone">Teléfono</label>
+				<div class="input-group mb-3">
+					<input 
+						type="text" 
+						class="form-control" 
+						id="phone" name="phone"
+						value="{{old('phone')}}"
+						>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="form-group">
-		<label for="phone">Teléfono</label>
-		<div class="input-group mb-3">
-			<input 
-				type="text" 
-				class="form-control" 
-				id="phone" name="phone"
-				value="{{old('phone')}}"
-				>
+	
+	<div class="row">
+		<div class="col-lg-4 col-md-12">
+			<div class="form-group">
+				<label for="discount">Descuento IVA</label>
+				<div class="input-group mb-3">
+
+					<input 
+						type="text" 
+						class="form-control" 
+						id="discount" name="discount"
+						>
+					<div class="input-group-append">
+						<span class="input-group-text">%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-12">
+			<div class="form-group">
+				<label for="shipping">Flete</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">$</span>
+					</div>
+					<input 
+						type="text" 
+						class="form-control" 
+						id="shipping" name="shipping"
+						>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -52,6 +97,8 @@
 			nombre: this['name'].value,
 			email: this['email'].value,
 			telefono: this['phone'].value,
+			flete: this['shipping'].value,
+			descuento: this['discount'].value
 		}
 
 		try{

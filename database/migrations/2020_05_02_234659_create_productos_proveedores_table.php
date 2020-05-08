@@ -18,7 +18,6 @@ class CreateProductosProveedoresTable extends Migration
 			$table->bigInteger('producto_id')->unsigned()->nullable();
 			$table->bigInteger('proveedor_id')->unsigned()->nullable();
 			$table->float('price')->unsigned();
-			$table->float('discount')->unsigned()->default(12);
 			$table->timestamps();
 			
 			$table->foreign('producto_id')->references('id')->on('productos');

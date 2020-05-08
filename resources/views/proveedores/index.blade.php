@@ -19,6 +19,8 @@
                             <th>Nombre</th>
                             <th>Email</th>
                             <th>Teléfono</th>
+                            <th>Desc. Iva</th>
+                            <th>Flete</th>
                             <th width="10%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -49,6 +51,20 @@
                     {
                         data: 'phone',
                         defaultContent: '-'
+                    },
+					{
+                        data: 'discount_percent',
+                        defaultContent: '-',
+						render: function (data, type, row){
+                            return Number(data).toFixed(2)+'%'
+                        }
+                    },
+					{
+                        data: 'shipping',
+                        defaultContent: '-',
+						render: function (data, type, row){
+                            return '$'+Number(data).toFixed(2)
+                        }
                     },
                     {data: 'btn'},
                 ] 

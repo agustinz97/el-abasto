@@ -17,7 +17,9 @@ class CreateProveedoresTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('email')->unique()->nullable();
-            $table->string('phone')->unique()->nullable();
+			$table->string('phone')->unique()->nullable();
+			$table->float('discount_percent')->unsigned();
+			$table->float('shipping')->unsigned();
             $table->timestamps();
         });
     }

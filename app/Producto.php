@@ -8,7 +8,7 @@ class Producto extends Model
 {
     protected $table = 'productos';
     public $appends = ['base_price', 'kg_price', 'retail_price', 
-					'wholesale_price', 'resale_price'];
+					'wholesale_price', 'resale_price', 'shipping'];
 	private $SHIPPING_COST = 55;
 
     public function marca(){
@@ -21,6 +21,10 @@ class Producto extends Model
 
 	public function getNameAttribute($value){
 		return ucfirst($value);
+	}
+
+	public function getShippingAttribute(){
+		return $this->SHIPPING_COST;
 	}
 
     public function getBasePriceAttribute(){

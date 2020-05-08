@@ -38,7 +38,9 @@ class ProveedoresController extends Controller
         $validator = Validator::make($request->all(),[
             'nombre' => 'required|string|unique:proveedores,name',
             'email' => 'nullable|string|unique:proveedores,email',
-            'telefono' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10'
+			'telefono' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10',
+			'descuento' => 'nullable|numeric',
+			'flete' => 'nullable|numeric'
         ]);
 
         if($validator->fails()){
@@ -51,6 +53,8 @@ class ProveedoresController extends Controller
         $proveedor->name = $request->input('nombre');
         $proveedor->email = $request->input('email');
         $proveedor->phone = $request->input('telefono');
+        $proveedor->discount_percent = $request->input('descuento');
+        $proveedor->shipping = $request->input('flete');
         
         try{
             $proveedor->save();

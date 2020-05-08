@@ -140,8 +140,8 @@ class ProductosController extends Controller
 				->editColumn('discount', function($model){
 					return $model->discount.'%';
 				})
-				->editColumn('flete', function(){
-					return 55;
+				->editColumn('flete', function($model){
+					return $model->shipping;
 				})
                 ->editColumn('format_name', function($product){
 
