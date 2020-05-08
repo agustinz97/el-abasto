@@ -41,20 +41,17 @@ class Producto extends Model
 					->orderBy('price', 'desc')	
 					->first();
 
-		if(!isset($prov)){
-			return 0;
+		if(isset($prov)){
+
+			return $this->basePriceProveedor($prov->id);
 		}
-
-		$price = $prov->pivot->price;
-
-        $discountValue = ($price * $this->discount_percent) / 100;
-
-        return $price - $discountValue + $this->SHIPPING_COST;
+		
+		return 0;
     }
 
     public function getKgPriceAttribute(){
 
-        if($this->kg > 0){
+		if($this->kg > 0){
             $baseKgPrice = $this->base_price / $this->kg;
             $profit = ($baseKgPrice * 40) / 100;
 

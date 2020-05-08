@@ -20,8 +20,8 @@ class CreateProductosProveedoresTable extends Migration
 			$table->float('price')->unsigned();
 			$table->timestamps();
 			
-			$table->foreign('producto_id')->references('id')->on('productos');
-			$table->foreign('proveedor_id')->references('id')->on('proveedores');
+			$table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+			$table->foreign('proveedor_id')->references('id')->on('proveedores')->onDelete('cascade');
         });
     }
 

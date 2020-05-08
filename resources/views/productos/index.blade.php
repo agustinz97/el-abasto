@@ -13,7 +13,12 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <h5>Listado de productos</h5>
-            </div>
+			</div>
+			<div class="col-md-8 col-sm-12">
+				<a href="{{route('productos.new')}}" class="btn btn-primary float-right">
+					Nuevo +
+				</a>
+			</div>
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
@@ -176,8 +181,8 @@
 
                         $('#productos-table').DataTable().ajax.reload()
                         
-                    }catch{
-                        console.error(error)
+                    }catch(error){
+                        console.error(error.response.data)
                     }
                     
                 }
