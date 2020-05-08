@@ -5,9 +5,6 @@
 	<div class="form-group">
 		<label for="name">Nombre del proveedor</label>
 		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Nombre</span>
-			</div>
 			<input 
 				type="text" 
 				class="form-control" 
@@ -19,9 +16,6 @@
 	<div class="form-group">
 		<label for="email">Correo electrónico</label>
 		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Correo electrónico</span>
-			</div>
 			<input 
 				type="email" 
 				class="form-control" 
@@ -33,9 +27,6 @@
 	<div class="form-group">
 		<label for="phone">Teléfono</label>
 		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Teléfono</span>
-			</div>
 			<input 
 				type="text" 
 				class="form-control" 
@@ -51,9 +42,9 @@
 </form>
 <script>
 
-	const form = document.querySelector('#newProveedor-form')
+	const formProveedor = document.querySelector('#newProveedor-form')
 
-	form.addEventListener('submit', async function (evt) {
+	formProveedor.addEventListener('submit', async function (evt) {
 		evt.preventDefault()
 
 		const url = route('proveedores.create')
@@ -74,6 +65,7 @@
 			})
 
 			this.reset()
+			document.querySelector('#errors').innerHTML = ''
 		}catch(error){
 
 			if(error.response.status === 500){

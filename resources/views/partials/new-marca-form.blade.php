@@ -1,17 +1,14 @@
-<form action="{{route('marcas.create')}}" method="POST">
+<div class="alert alert-danger" style="display: none" id="errors">
+</div>
+<form action="#" method="POST" id="newMarca-form">
 	@csrf
 	<div class="form-group">
 		<label for="name">Nombre de la marca</label>
 		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Nombre</span>
-			</div>
 			<input 
 				type="text" 
 				class="form-control" 
-				id="name-marca" name="name"
-				value="{{old('name')}}"
-				required>
+				id="name-marca" name="name">
 		</div>
 	</div>
 	
@@ -22,23 +19,21 @@
 
 <script>
 
-	const form = document.querySelector('#newProveedor-form')
+	const formMarca = document.querySelector('#newMarca-form')
 
-	form.addEventListener('submit', async function (evt) {
+	formMarca.addEventListener('submit', async function (evt) {
 		evt.preventDefault()
 
-		const url = route('proveedores.create')
+		const url = route('marcas.create')
 		const data = {
 			nombre: this['name'].value,
-			email: this['email'].value,
-			telefono: this['phone'].value,
 		}
 
 		try{
 			const res = await axios.post(url, data)
 		
 			Swal.fire({
-				title: 'Proveedor agregado',
+				title: 'Marca agregada',
 				icon: 'success',
 				showConfirmButton: false,
 				timer: 1000
@@ -46,6 +41,7 @@
 
 			this.reset()
 		}catch(error){
+			console.log(error.response.data)
 
 			if(error.response.status === 500){
 				Swal.fire({

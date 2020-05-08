@@ -6,6 +6,7 @@ use App\Marca;
 use App\Proveedor;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 
 class MarcasController extends Controller
@@ -23,26 +24,27 @@ class MarcasController extends Controller
     public function create(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|unique:marcas,name',
+            'nombre' => 'required|string|unique:marcas,name',
         ]);
 
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+			/* return redirect()->back()->withErrors($validator)->withInput($request->all()); */
+			return response()->json($validator->errors(), 422);		
         }
 
         $marca = new Marca();
-        $marca->name = $request->input('name');
+        $marca->name = $request->input('nombre');
 
         try{
             $marca->save();
 
-            return redirect()->back()->with([
-                'success' => 'Marca creada exitosamente'
-            ]);
+			return response()->json($marca, 201);		
+            
         }catch(Exception $ex){
-            return redirect()->back()->with([
-                'error' => $ex->getMessage()
-            ]);
+            if (App::environment('local')) {
+				return response()->json($ex->getMessage(), 500);
+			}
+			return response()->json('Something wrong', 500);
         }
 
     }
