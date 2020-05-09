@@ -63,7 +63,7 @@ class Producto extends Model
 
     public function getRetailPriceAttribute(){
 
-        $profit = $this->basePrice * 30 / 100;
+        $profit = $this->base_price * 30 / 100;
 
         return $this->base_price + $profit;
     }

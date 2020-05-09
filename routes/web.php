@@ -40,3 +40,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::get('/{id}', 'ProductosController@show')->name('productos.show');
     });
 });
+
+Route::get('/print/public-prices', 'PrintController@publicPrices')
+	->name('print.publicPrices');

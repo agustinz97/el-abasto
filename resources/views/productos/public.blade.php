@@ -11,32 +11,36 @@
 @section('content')
     <div class="container">
         <div class="row mb-3">
-            <div class="col-md-4">
-                <h5>Lista de precios pública</h5>
-            </div>
+            <div class="col-md-4 col-sm-12">
+                <h5>Lista de precios al <small>{{Carbon\Carbon::now()->format('d/m/Y')}}</small></h5>
+			</div>
+			<div class="col-md-8 col-sm-12">
+				<a target="_blank"
+					href="{{route('print.publicPrices')}}" 
+					class="btn btn-info float-right text-white">
+					Imprimir
+				</a>
+			</div>
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <table id="productos-table" class="table table-hover table-striped nowrap" style="width:100%">
+                <table id="productos-table" class="table table-hover table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th width="10%">Marca</th>
-							<th width="20%">Nombre</th>
+                            <th width="20%">Marca</th>
+							<th width="30%">Nombre</th>
                             <th>Precio Kg</th>
                             <th>Precio minorista</th>
                             <th>Precio reventa</th>
                             <th>Precio mayorista</th>
                         </tr>
 					</thead>
-					{{-- <tfoot>
+					<tfoot>
 						<tr>
-							<th>código</th>
-							<th>proveedor</th>
-							<th>marca</th>
-							<th>nombre</th>
+							<th>Marca</th>
+							<th>Nombre</th>
 						</tr>
-					</tfoot> --}}
+					</tfoot>
                 </table>
             </div>
         </div>
@@ -96,12 +100,6 @@
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
-                    {
-                        data: 'id',
-                        render: function (data, type, row){
-                            return '#'+data.padStart(6, '0')
-                        }
-                    },
                     {data: 'marca'},
                     {data: 'format_name'},
                     {
@@ -112,119 +110,43 @@
 							}else{
 								return '-'
 							}
-                        }
+                        },
+						searchable: false,
                     },
                     {
                         data: 'retail_price',
                         render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
-                        }
+                        },
+						searchable: false,
                     },
                     {
                         data: 'resale_price',
                         render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
-                        }
+                        },
+						searchable: false,
                     },
                     {
                         data: 'wholesale_price',
                         render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
-                        }
+                        },
+						searchable: false,
                     },
                 ] ,
-				/* initComplete: function () {
+				initComplete: function () {
 					this.api().columns().every(function () {
 						var column = this;
 						var input = document.createElement("input");
+						input.placeholder = 'Buscar por '+title
 						$(input).appendTo($(column.footer()).empty())
 						.on('keyup', function () {
 							column.search($(this).val(), false, false, true).draw();
 						});
 					});
-				} */
+				}
             });
         } );
-    </script>
-    <script>
-        function remove(id){
-
-            Swal.fire({
-                title: '¿Seguro quieres eliminar?',
-                text: "Esto no puede deshacerse",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, eliminar'
-            })
-            .then( async (result) => {
-                if (result.value) {
-
-                    const url = route('productos.delete', id)
-
-                    try{
-                        const response = await axios.delete(url)
-
-                        Swal.fire(
-                            'Eliminado!',
-                            'El producto fue eliminado',
-                            'success'
-                        )
-
-                        $('#productos-table').DataTable().ajax.reload()
-                        
-                    }catch{
-                        console.error(error)
-                    }
-                    
-                }
-            })
-  
-        }
-    </script>
-    <script>
-        const form = document.querySelector('#updatePricesForm');
-        const table =  document.querySelector('#productos-table')
-        form.onsubmit = async function (e){
-            e.preventDefault();
-
-            let ids = [];    
-            Array.from(table.rows).forEach((row, i) => {
-                
-                if(i>0){
-                    const value = row.cells[0].textContent;
-                    ids.push(parseInt(value.substring(1)))
-                }
-
-            });
-
-            const postData = {
-                productos: ids,
-                percentage: form['percentage'].value,
-            }
-            
-            try{
-                const res = await axios.post(route('productos.updatePrices'), postData)
-
-                Swal.fire(
-                    '¡Correcto!',
-                    'Los precios fueron actualizados',
-                    'success'
-                )
-                $('#productos-table').DataTable().ajax.reload()
-                $('#exampleModal').modal('hide');
-
-            }catch(error){
-
-                Swal.fire(
-                    '¡Ups! Algo salió mal',
-                    'Intente de nuevo mas tarde',
-                    'error'
-                )
-                console.error(error)
-            }
-            
-        }
     </script>
 @endsection
