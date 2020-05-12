@@ -1,20 +1,17 @@
 @extends('layouts.app')
 
-@section('styles')
-<style>
-	tfoot {
-		display: table-header-group;
-	}
-</style>
-@endsection
-
 @section('content')
     <div class="container">
         <div class="row mb-3">
-            <div class="col-md-4 col-sm-12">
-                <h5>Lista de precios al <small>{{Carbon\Carbon::now()->format('d/m/Y')}}</small></h5>
+            <div class="col-md-3 col-sm-12">
+                <h5>
+					<input 
+						type="text" 
+						disabled class="form-control" tabindex="-1" 
+						value="Lista de precios del dia {{Carbon\Carbon::now()->format('d/m/Y')}}">
+				</h5>
 			</div>
-			<div class="col-md-8 col-sm-12">
+			<div class="col-md-9 col-sm-12">
 				<a target="_blank"
 					href="{{route('print.publicPrices')}}" 
 					class="btn btn-info float-right text-white">
@@ -35,12 +32,6 @@
                             <th>Precio mayorista</th>
                         </tr>
 					</thead>
-					<tfoot>
-						<tr>
-							<th>Marca</th>
-							<th>Nombre</th>
-						</tr>
-					</tfoot>
                 </table>
             </div>
         </div>
@@ -90,17 +81,12 @@
     <script>
         $(document).ready(function() {
 
-			$('#productos-table tfoot th').each( function () {
-				var title = $(this).text();
-				$(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Buscar por '+title+'" />' );
-			} );
-
             let table = $('#productos-table').DataTable({
                 "order": [[ 2, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
-                    {data: 'marca'},
+                    {data: 'marca.name'},
                     {data: 'format_name'},
                     {
                         data: 'kg_price',

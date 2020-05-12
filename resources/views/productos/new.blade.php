@@ -230,9 +230,10 @@
 				if(error.response.status === 500){
 					Swal.fire({
 						title: 'Algo salió mal.',
-						text: 'Intente de nuevo mas tarde.',
+						text: error.response.data,
 						icon: 'error',
 					})
+
 				}else if(error.response.status === 422){
 
 					const errors = Object.values(error.response.data)

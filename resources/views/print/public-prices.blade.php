@@ -5,20 +5,20 @@
 	
 	<style type="text/css">
         @page {
-            margin: 0px;
+            margin: 220px 25px 90px 25px;
         }
-        body {
-            margin: 0px;
-        }
-        * {
-            font-family: Verdana, Arial, sans-serif;
-        }
+		* {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
         a {
             color: #fff;
             text-decoration: none;
         }
 		header{
 			position: fixed;
+			top: -200px;
+			left: 0px;
+			right: 0px;
 		}
         table {
             font-size: x-small;
@@ -28,7 +28,6 @@
             font-size: x-small;
         }
         .invoice table {
-            margin: 15px;
 			border-collapse: collapse;
         }
 		.invoice table td, .invoice table th{
@@ -61,10 +60,6 @@
 			page-break-after: always;
 		}
 
-		main{
-			margin-top: 170px;
-		}
-
 		.title{
 			font-size: 20px;
 		}
@@ -72,6 +67,19 @@
 			font-size: 12px;
 			font-weight: normal;
 		}
+		footer {
+			position: fixed; 
+			bottom: -80px; 
+			left: 0px; 
+			right: 0px;
+			height: 50px; 
+			text-align: right;
+		}
+ 
+		footer .pagenum:before {
+			content: counter(page);
+		}
+
     </style>
 
 </head>
@@ -124,13 +132,14 @@
 				<tbody>
 					
 					@foreach ($products as $item)
-					<tr>
-						<td align="left">{{$item->marca->name ?? ''}} {{$item->format_name}}</td>
-						<td align="right">${{number_format($item->kg_price, 2)}}</td>
-						<td align="right">${{number_format($item->retail_price, 2)}}</td>
-						<td align="right">${{number_format($item->resale_price, 2)}}</</td>
-						<td align="right">${{number_format($item->wholesale_price, 2)}}</</td>
-					</tr>
+
+						<tr>
+							<td align="left">{{$item->marca->name ?? ''}} {{$item->format_name}}</td>
+							<td align="right">${{number_format($item->kg_price, 2)}}</td>
+							<td align="right">${{number_format($item->retail_price, 2)}}</td>
+							<td align="right">${{number_format($item->resale_price, 2)}}</</td>
+							<td align="right">${{number_format($item->wholesale_price, 2)}}</</td>
+						</tr>
 					@endforeach
 					
 				</tbody>
@@ -139,6 +148,16 @@
 		</div>
 	</main>
 
-	<div class="page-break"></div>
+	<script type="text/php">
+		if (isset($pdf)) {
+			$text = "Página {PAGE_NUM} de {PAGE_COUNT}";
+			$size = 10;
+			$font = $fontMetrics->getFont("Verdana");
+			$width = $fontMetrics->get_text_width($text, $font, $size) / 2;
+			$x = ($pdf->get_width() - $width);
+			$y = $pdf->get_height() - 35;
+			$pdf->page_text($x, $y, $text, $font, $size);
+		}
+	</script>
 </body>
 </html>

@@ -25,25 +25,19 @@
                 <table id="productos-table" class="table table-hover table-striped nowrap" style="width:100%">
                     <thead>
                         <tr>
-							<th>#</th>
                             <th width="10%">Proveedor</th>
                             <th width="10%">Marca</th>
 							<th width="20%">Nombre</th>
-                            <th>Precio facturado</th>
+                            <th>Precio de lista</th>
                             <th>Descuento IVA</th>
                             <th>Flete</th>
-							<th>Precio de compra</th>
+							<th>Precio real</th>
 							<th>&nbsp;</th>
                         </tr>
 					</thead>
-					{{-- <tfoot>
-						<tr>
-							<th>código</th>
-							<th>proveedor</th>
-							<th>marca</th>
-							<th>nombre</th>
-						</tr>
-					</tfoot> --}}
+					<tfoot>
+						<caption>Todos los precios son unitarios</caption>
+					</tfoot>
                 </table>
             </div>
         </div>
@@ -103,29 +97,23 @@
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
-                    {
-                        data: 'id',
-                        render: function (data, type, row){
-                            return '#'+data.padStart(6, '0')
-                        }
-                    },
-                    {data: 'proveedor'},
-                    {data: 'marca'},
+                    {data: 'proveedor.name'},
+                    {data: 'marca.name'},
                     {data: 'format_name'},
                     {
-						data: 'precio_factura',
+						data: 'price',
 						render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }
 					},
                     {
-						data: 'discount',
+						data: 'proveedor.discount_percent',
 						render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }
 					},
                     {
-						data: 'flete',
+						data: 'proveedor.shipping',
 						render: function (data, type, row){
                             return '$'+Number(data).toFixed(2)
                         }

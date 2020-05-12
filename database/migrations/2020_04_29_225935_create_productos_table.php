@@ -20,11 +20,14 @@ class CreateProductosTable extends Migration
 			$table->float('stock')->default(0);
 			$table->float('kg')->default(0);
 			$table->bigInteger('marca_id')->unsigned()->nullable();
+			$table->bigInteger('proveedor_id')->unsigned()->nullable();
 			$table->integer('units')->unsigned()->default(1);
+			$table->float('price')->unsigned();
             $table->timestamps();
 
 			$table->foreign('marca_id')->references('id')->on('marcas');
-			$table->unique(['name', 'marca_id', 'kg']);
+			$table->foreign('proveedor_id')->references('id')->on('proveedores');
+			$table->unique(['name', 'marca_id', 'kg', 'proveedor_id']);
         });
     }
 

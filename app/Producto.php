@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $table = 'productos';
-    public $appends = ['base_price','kg_price', 'retail_price', 
+    public $appends = ['base_price','kg_price', 'retail_price',
 					'wholesale_price', 'resale_price', 'format_name'];
 
     public function marca(){
         return $this->belongsTo('App\Marca');
 	}
 	
-	public function proveedores(){
-		return $this->belongsToMany('App\Proveedor', 'productos_proveedores')->withPivot('price');
+	public function proveedor(){
+		return $this->belongsTo('App\Proveedor');
 	}
 
 	public function getNameAttribute($value){
@@ -24,41 +24,43 @@ class Producto extends Model
 
 	public function getFormatNameAttribute(){
 		$name = $this->name;
-		if($this->units > 0){
+/* 		if($this->units > 0){
 			$name.=' '.$this->units.'u.';
-		}
+		} */
 		if($this->kg >= 1){
 			$name.=' x'.$this->kg.'Kg';
 		}elseif($this->kg > 0){
-			$name.=' x'.($this->kg).'g';
+			$name.=' x'.($this->kg*1000).'g';
 		}
 		return $name;
 	}
 
+	public function unitPrice($proveedor_id){
+		return $this->price / $this->units;
+	}
+
     public function getBasePriceAttribute(){
-		$prov = $this
-					->proveedores()
-					->orderBy('price', 'desc')	
-					->first();
-
-		if(isset($prov)){
-
-			return $this->basePriceProveedor($prov->id);
-		}
 		
-		return 0;
+		$discount = $this->price * $this->proveedor->discount_percent /100;
+		
+		$basePrice = $this->price - $discount + $this->proveedor->shipping;
+
+		return $basePrice / $this->units;
     }
 
     public function getKgPriceAttribute(){
 
-		if($this->kg > 0){
-            $baseKgPrice = $this->base_price / $this->kg;
-            $profit = ($baseKgPrice * 40) / 100;
 
-            return $baseKgPrice + $profit;
+		if($this->kg > 0){
+			$baseKgPrice = $this->base_price / $this->kg;
+			
+			$profit = ($baseKgPrice * 40) / 100;
+
+        	return $baseKgPrice + $profit;
         }
 
-        return null;
+		return null;
+
     }
 
     public function getRetailPriceAttribute(){
@@ -82,22 +84,4 @@ class Producto extends Model
 
         return $this->base_price + $profit;
     }
-
-	public function basePriceProveedor($proveedor_id = 0){
-
-		$proveedor = $this->proveedores()->wherePivot('proveedor_id', '=', $proveedor_id)->first();
-
-		if($proveedor){
-
-			$price = $proveedor->pivot->price;
-			$discount_percent = $proveedor->discount_percent;
-			$shipping = $proveedor->shipping;
-
-			$discount = $price * $discount_percent / 100;
-
-			return $price - $discount + $shipping;
-		}
-
-		return 0;
-	}
 }

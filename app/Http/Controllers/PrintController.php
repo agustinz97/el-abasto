@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use \PDF;
 
 class PrintController extends Controller
@@ -16,12 +17,15 @@ class PrintController extends Controller
     public function publicPrices()
     {
 
-		$products = Producto::with(['marca', 'proveedores'])->get();
+		$products = Producto::with(['marca', 'proveedor'])->orderBy('marca_id', 'desc')->get();
 
-		$pdf = PDF::loadView('print.public-prices', [
+
+		$pdf = App::make('dompdf.wrapper');
+		$pdf->loadView('print.public-prices', [
 			'products' => $products,
 			'filterBy' => 'todos'
 		]);
+		$pdf->getDomPDF()->set_option("enable_php", true);
   
         return $pdf->stream('itsolutionstuff.pdf');
     }
