@@ -93,7 +93,7 @@
 							<div class="row">
 								
 								<div class="col-md-3 col-sm-12">
-                                    <label for="units">Unidades por bulto</label>
+                                    <label for="units">Unidades</label>
                                     <div class="input-group mb-3">
                                         <input 
                                             type="number" step="1"

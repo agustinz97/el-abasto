@@ -36,6 +36,7 @@ Route::group(['prefix' => 'productos'], function () {
     Route::delete('/{id}', 'ProductosController@delete')->name('productos.delete');
 	Route::post('/actualizar-precios', 'ProductosController@updatePrices')->name('productos.updatePrices');
 	Route::post('/', 'ProductosController@create')->name('productos.create');
+	Route::post('/{id}', 'ProductosController@update')->name('productos.update');
 
 });
 
