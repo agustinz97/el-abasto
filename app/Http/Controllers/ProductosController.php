@@ -173,14 +173,21 @@ class ProductosController extends Controller
         }
 	}
 
-	public function datatables(){
-		$query = Producto::query()->with('marca', 'proveedor');
+	public function datatables(Request $request){
+
+		$marca = $request->marca;
+
+		$productos = Producto::query()
+					->when($marca, function ($query, $marca){
+						return $query->where('marca_id', '=', $marca);
+					})
+					->with('marca', 'proveedor');
 
         return datatables()
-                ->eloquent($query)
+                ->eloquent($productos)
                 ->addColumn('btn', 'productos.actions')
 				->rawColumns(['btn'])
-                ->make(true);
+                ->make();
 	}
 
 }

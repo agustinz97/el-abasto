@@ -23,7 +23,7 @@
 							
 							<div class="row">
 								<div class="col-md-6 col-sm-12">
-                                    <label for="marca">Proveedor</label>
+                                    <label for="proveedor">Proveedor</label>
                                     <div class="input-group mb-3">
 										<select class="custom-select" required id="proveedor" name="proveedor">
 											<option value="">Seleccione el proveedor</option>

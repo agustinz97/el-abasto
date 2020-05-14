@@ -23,6 +23,9 @@
         table {
             font-size: x-small;
         }
+		header table td{
+			vertical-align: top;
+		}
         tfoot tr td {
             font-weight: bold;
             font-size: x-small;
@@ -32,7 +35,7 @@
         }
 		.invoice table td, .invoice table th{
 			border: 1px solid black;
-			padding: 5px
+			padding: 5px;
 		}
 		.invoice table tr:first-child(){
 			background-color: rgb(59, 56, 56);
@@ -105,10 +108,6 @@
 						<h3 class="fecha">
 							<strong>Fecha:</strong>
 							{{Carbon\Carbon::now()->format('d/m/Y')}}
-						</h3>
-						<h3 class="fecha">
-							<strong>Listado de:</strong>
-							{{ucfirst($filterBy)}}
 						</h3>
 					</td>
 				</tr>

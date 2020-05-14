@@ -13,7 +13,11 @@ class MarcasController extends Controller
 {
     public function index(){
         return view('marcas.index');
-    }
+	}
+	
+	public function all(){
+		return response()->json(Marca::all(), 200);
+	}
 
     public function new(){
         return view('marcas.new')->with([

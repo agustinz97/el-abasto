@@ -185,13 +185,8 @@
     <script>
         $(document).ready(function() {
 
-			$('#productos-table tfoot th').each( function () {
-				var title = $(this).text();
-				$(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Buscar por '+title+'" />' );
-			} );
-
             let table = $('#productos-table').DataTable({
-                "order": [[ 3, "asc" ]],
+                "order": [[ 0, "asc" ]],
                 "serverside": true,
                 "ajax": "{{route('datatables.productos')}}",
                 "columns": [
@@ -207,7 +202,7 @@
                     {
 						data: 'proveedor.discount_percent',
 						render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
+                            return Number(data).toFixed(2)+'%'
                         }
 					},
                     {
@@ -226,16 +221,6 @@
 						data: 'btn'
 					}
                 ] ,
-				/* initComplete: function () {
-					this.api().columns().every(function () {
-						var column = this;
-						var input = document.createElement("input");
-						$(input).appendTo($(column.footer()).empty())
-						.on('keyup', function () {
-							column.search($(this).val(), false, false, true).draw();
-						});
-					});
-				} */
             });
         } );
     </script>

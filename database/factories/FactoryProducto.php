@@ -11,7 +11,7 @@ $factory->define(Producto::class, function (Faker $faker) use ($factory){
 		'proveedor_id' => 1,
 		'marca_id' => rand(1,3),
 		'kg' => rand(1, 20),
-		'price' => 1000,
+		'price' => rand(300, 3500),
 		'units' => rand(1, 12)
     ];
 });

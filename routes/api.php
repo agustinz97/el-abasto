@@ -28,6 +28,7 @@ Route::group(['prefix' => 'proveedores'], function () {
 });
 
 Route::group(['prefix' => 'marcas'], function () {
+	Route::get('/', 'MarcasController@all')->name('marcas.all');
 	Route::post('/', 'MarcasController@create')->name('marcas.create');
     Route::delete('/{id}', 'MarcasController@delete')->name('marcas.delete');
 });
@@ -47,6 +48,11 @@ Route::group(['prefix' => 'datatables'], function () {
 	Route::get('/marcas', 'MarcasController@datatables')
 			->name('datatables.marcas');
 
-	Route::get('/productos', 'ProductosController@datatables')
+	Route::post('/productos', 'ProductosController@datatables')
 			->name('datatables.productos');
+});
+
+Route::group(['prefix' => 'print'], function () {
+	Route::post('/public-prices', 'PrintController@publicPrices')
+		->name('print.publicPrices');
 });
