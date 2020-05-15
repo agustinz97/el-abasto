@@ -93,7 +93,7 @@
             </div>
             <div class="modal-body">
                 <form action="#" id="updateProducto" class="container-fluid">
-                    @csrf
+					<div class="alert alert-danger" style="display: none" id="errorsBadge"> </div>
                     <div class="row mb-3">
                         <div class="col-lg-6 col-md-8 col-sm-12">
                             <label for="proveedor">Proveedor</label>
@@ -188,7 +188,10 @@
             let table = $('#productos-table').DataTable({
                 "order": [[ 0, "asc" ]],
                 "serverside": true,
-                "ajax": "{{route('datatables.productos')}}",
+                "ajax": {
+					url: "{{route('datatables.productos')}}",
+					type: 'POST',
+				},
                 "columns": [
                     {data: 'proveedor.name'},
                     {data: 'marca.name'},
@@ -281,6 +284,7 @@
 				this.hidden = true
 				document.getElementById('btnSave').hidden = true
 				document.getElementById('btnEdit').hidden = false
+				const errorsBadge = document.querySelector('#errorsBadge').style.display = 'none'
 			})
 
 		document.getElementById('btnEdit')
@@ -298,6 +302,7 @@
 		document.getElementById('btnSave')
 			.addEventListener('click', function(){
 
+				const errorsBadge = document.querySelector('#errorsBadge')
 				const formProducto = document.getElementById('updateProducto')
 				const url = route('productos.update', window.producto.id)
 				const data = {
@@ -330,17 +335,31 @@
                         $('#productos-table').DataTable().ajax.reload()
 					})
 					.catch(err => {
-						Swal.fire(
-							'Error',
-							err.response || err.message,
-							'error'
-						)
-					})
+						if(err.response.status === 422){
+							const errors = Object.values(err.response.data)
 
-				
-				/* .then(()=>{
-					$('#modalShowProducto').modal('hide')
-				}) */
+							errorsBadge.innerHTML = '';
+
+							const ul = document.createElement('ul')
+							ul.classList.add('mb-0')
+							
+							errors.forEach(error => {
+								const li = document.createElement('li')
+								li.textContent = error
+
+								ul.appendChild(li)
+							})
+
+							errorsBadge.appendChild(ul)
+							errorsBadge.style.display = 'block'
+						}else{
+							Swal.fire(
+								'Error',
+								err.response.data || err.message,
+								'error'
+							)
+						}
+					})
 			})
 
 		function show(id){

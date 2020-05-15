@@ -25,7 +25,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['prefix' => 'proveedores'], function () {
         Route::get('/', 'ProveedoresController@index')->name('proveedores.index');
         Route::get('/new', 'ProveedoresController@new')->name('proveedores.new');
-        Route::post('/{id}', 'ProveedoresController@show')->name('proveedores.show');
     });
 
     Route::group(['prefix' => 'marcas'], function () {
@@ -37,6 +36,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['prefix' => 'productos'], function () {
         Route::get('/', 'ProductosController@index')->name('productos.index');
         Route::get('/new', 'ProductosController@new')->name('productos.new');
-        Route::get('/{id}', 'ProductosController@show')->name('productos.show');
     });
 });

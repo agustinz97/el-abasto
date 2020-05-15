@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Proveedor;
 use Exception;
 use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 
 class ProveedoresController extends Controller
@@ -28,9 +29,20 @@ class ProveedoresController extends Controller
 
         $proveedor->delete();
 
-        return response('', 204);
+        return response('deleted', 204);
 
-    }
+	}
+	
+	public function show($id){
+
+		$proveedor = Proveedor::find($id);
+		
+		if($proveedor){
+			return response()->json($proveedor, 200);
+		}else{
+			return response()->json('Not found', 404);
+		}
+	}
 
     /*Creates a new resource */
     public function create(Request $request){
@@ -44,7 +56,6 @@ class ProveedoresController extends Controller
         ]);
 
         if($validator->fails()){
-			/* return redirect()->back()->withErrors($validator)->withInput($request->all()); */
 			return response()->json($validator->errors(), 422 );
         }
 
@@ -58,16 +69,10 @@ class ProveedoresController extends Controller
         
         try{
             $proveedor->save();
-            /* return redirect()->back()->with([
-                'success' => 'Proveedor guardado con éxito'
-			]); */
 			
 			return response()->json($proveedor, 201);
 
         }catch(Exception $ex){
-            /* return redirect()->back()->with([
-                'error' => 'Algo salió mal. Intente de nuevo mas tarde'
-			]); */
 			
 			if (App::environment('local')) {
 				return response()->json($ex->getMessage(), 500);
@@ -75,6 +80,48 @@ class ProveedoresController extends Controller
 			return response()->json('Something wrong', 500);
         }
 
+	}
+
+	public function update(Request $request, $id){
+
+		$proveedor = Proveedor::find($id);
+
+		if($proveedor){
+			$validator = Validator::make($request->all(),[
+				'nombre' => 'required|string|unique:proveedores,name,'.$id,
+				'email' => 'nullable|string|unique:proveedores,email,'.$id,
+				'telefono' => 'nullable|numeric|unique:proveedores,phone|digits_between:6,10',
+				'descuento' => 'nullable|numeric',
+				'flete' => 'nullable|numeric'
+			]);
+
+			if(!$validator->fails()){
+
+				$proveedor->name = $request->input('nombre');
+				$proveedor->email = $request->input('email');
+				$proveedor->phone = $request->input('telefono');
+				$proveedor->discount_percent = $request->input('descuento') ?? 0;
+				$proveedor->shipping = $request->input('flete') ?? 0;
+
+				try{
+					$proveedor->save();
+
+					return response()->json($proveedor, 200);
+				}catch(Exception $ex){
+					
+					if (App::environment('local')) {
+						return response()->json($ex->getMessage(), 500);
+					}
+					return response()->json('Something wrong.', 500);
+				}
+
+			}
+
+			return response()->json($validator->errors(), 422 );
+
+		}
+
+		return response()->json('Not found', 404);
 	}
 	
 	public function datatables(){
