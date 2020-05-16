@@ -23,6 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::group(['prefix' => 'proveedores'], function () {
+	Route::get('/', 'ProveedoresController@all')->name('proveedores.all');
 	Route::post('/', 'ProveedoresController@create')->name('proveedores.create');
     Route::delete('/{id}', 'ProveedoresController@delete')->name('proveedores.delete');
     Route::get('/{id}', 'ProveedoresController@show')->name('proveedores.show');
@@ -32,7 +33,9 @@ Route::group(['prefix' => 'proveedores'], function () {
 Route::group(['prefix' => 'marcas'], function () {
 	Route::get('/', 'MarcasController@all')->name('marcas.all');
 	Route::post('/', 'MarcasController@create')->name('marcas.create');
-    Route::delete('/{id}', 'MarcasController@delete')->name('marcas.delete');
+	Route::delete('/{id}', 'MarcasController@delete')->name('marcas.delete');
+	Route::get('/{id}', 'MarcasController@show')->name('marcas.show');
+	Route::post('/{id}', 'MarcasController@update')->name('marcas.update');
 });
 
 Route::group(['prefix' => 'productos'], function () {

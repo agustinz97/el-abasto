@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row mb-3">
+        <div class="row mb-5">
             <div class="col-md-4">
                 <h5>Listado de productos</h5>
 			</div>
@@ -18,16 +18,48 @@
 				<a href="{{route('productos.new')}}" class="btn btn-primary float-right">
 					Nuevo +
 				</a>
+				<button class="btn btn-primary float-right mr-2" 
+						data-target="#exampleModal"
+						data-toggle="modal">
+					Actualizar precios
+				</button>
 			</div>
+		</div>
+		<div class="row ">
+            <div class="col-md-3 col-sm-12 mb-3">
+				<div class="input-group">
+					<select class="custom-select" required id="selectProveedores" name="proveedor">
+						<option value="">Todos los proveedores</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-12 mb-3">
+				<div class="input-group">
+					<select class="custom-select" required id="selectMarcas" name="marca">
+						<option value="">Todas las marcas</option>
+					</select>
+				</div>
+			</div>
+			{{-- <div class="col-md-6 col-sm-12 mb-3">
+				<a target="_blank" id="btnPrint"
+					href="{{route('print.publicPrices')}}"
+					class="btn btn-info float-right text-white">
+					<span class="material-icons" style="vertical-align: middle;">
+						print
+					</span>
+				</a>
+			</div> --}}
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <table id="productos-table" class="table table-hover table-striped" style="width:100%">
+                <table id="productos-table" class="table table-hover table-striped nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th width="10%">Proveedor</th>
                             <th width="10%">Marca</th>
 							<th width="20%">Nombre</th>
+							<th>Unidades</th>
+							<th>Precio bulto</th>
                             <th>Precio de lista</th>
                             <th>Descuento IVA</th>
                             <th>Flete</th>
@@ -183,49 +215,78 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
 
-            let table = $('#productos-table').DataTable({
-                "order": [[ 0, "asc" ]],
-                "serverside": true,
-                "ajax": {
-					url: "{{route('datatables.productos')}}",
-					type: 'POST',
-				},
-                "columns": [
-                    {data: 'proveedor.name'},
-                    {data: 'marca.name'},
-                    {data: 'format_name'},
-                    {
-						data: 'price',
-						render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
-                        }
+			document.querySelector('#updateProducto')
+				.addEventListener('submit', evt => {
+					evt.preventDefault()
+				})
+            function fillDataTable(marca=null, proveedor=null){
+				$('#productos-table').DataTable({
+					"order": [[ 0, "asc" ]],
+					"serverside": true,
+					"ajax": {
+						url: "{{route('datatables.productos')}}",
+						type: 'POST',
+						data: {
+							marca: marca,
+							proveedor: proveedor
+						}
 					},
-                    {
-						data: 'proveedor.discount_percent',
-						render: function (data, type, row){
-                            return Number(data).toFixed(2)+'%'
-                        }
-					},
-                    {
-						data: 'proveedor.shipping',
-						render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
-                        }
-					},
-                    {
-						data: 'base_price',
-						render: function (data, type, row){
-                            return '$'+Number(data).toFixed(2)
-                        }
-					},
-					{
-						data: 'btn'
-					}
-                ] ,
-            });
-        } );
+					"columns": [
+						{
+							data: 'proveedor.name',
+							searchable:false
+						},
+						{
+							data: 'marca.name',
+							searchable:false
+						},
+						{data: 'format_name'},
+						{data: 'units'},
+						{
+							data: 'price',
+							render: function (data, type, row){
+								return '$'+Number(data).toFixed(2)
+							},
+							searchable:false
+						},
+						{
+							data: 'unit_price',
+							render: function (data, type, row){
+								return '$'+Number(data).toFixed(2)
+							},
+							searchable:false
+						},
+						{
+							data: 'proveedor.discount_percent',
+							render: function (data, type, row){
+								return Number(data).toFixed(2)+'%'
+							},
+							searchable:false
+						},
+						{
+							data: 'proveedor.shipping',
+							render: function (data, type, row){
+								return '$'+Number(data).toFixed(2)
+							},
+							searchable:false
+						},
+						{
+							data: 'base_price',
+							render: function (data, type, row){
+								return '$'+Number(data).toFixed(2)
+							},
+							searchable:false
+						},
+						{
+							data: 'btn',
+							searchable:false
+						}
+					] ,
+				});
+			}
+
+			fillDataTable()
     </script>
     <script>
         function remove(id){
@@ -382,6 +443,34 @@
 				})
 				
 		}
+
+		const selectMarcas = document.getElementById('selectMarcas')
+		const selectProveedores = document.getElementById('selectProveedores')
+		function loadSelect(select, elements){
+
+			elements.forEach(x => {
+				select.options.add(new Option(x.name, x.id))
+			})
+
+		}
+
+		axios.get(route('proveedores.all')).then(res => {
+			loadSelect(selectProveedores, res.data)
+		})
+		axios.get(route('marcas.all')).then(res => {
+			loadSelect(selectMarcas, res.data)
+		})
+
+		function updateTable(){
+			let marca = selectMarcas.value;
+			let proveedor = selectProveedores.value;
+			
+			$('#productos-table').DataTable().destroy();
+			fillDataTable(marca, proveedor)
+		}
+
+		selectMarcas.addEventListener('change', updateTable)
+		selectProveedores.addEventListener('change', updateTable)
     </script>
     <script>
         const form = document.querySelector('#updatePricesForm');
@@ -389,15 +478,12 @@
         form.onsubmit = async function (e){
             e.preventDefault();
 
-            let ids = [];    
-            Array.from(table.rows).forEach((row, i) => {
-                
-                if(i>0){
-                    const value = row.cells[0].textContent;
-                    ids.push(parseInt(value.substring(1)))
-                }
-
-            });
+            let ids = []
+			$('#productos-table').DataTable().rows({search: 'applied'}).every(function(index){
+				ids.push(this.row(index).data().id)
+			})
+			
+			console.log(ids);
 
             const postData = {
                 productos: ids,
@@ -413,13 +499,15 @@
                     'success'
                 )
                 $('#productos-table').DataTable().ajax.reload()
-                $('#exampleModal').modal('hide');
+				$('#exampleModal').modal('hide');
+				
+				form.reset();
 
             }catch(error){
 
                 Swal.fire(
                     '¡Ups! Algo salió mal',
-                    'Intente de nuevo mas tarde',
+                    error.message || 'Intente de nuevo mas tarde',
                     'error'
                 )
                 console.error(error)

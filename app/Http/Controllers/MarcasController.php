@@ -51,7 +51,51 @@ class MarcasController extends Controller
 			return response()->json('Something wrong', 500);
         }
 
-    }
+	}
+	
+	public function update(Request $request, $id){
+
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required|string|unique:marcas,name,'.$id,
+        ]);
+
+        if($validator->fails()){
+			return response()->json($validator->errors(), 422);		
+        }
+
+		$marca = Marca::find($id);
+		
+		if(!$marca){
+			return response()->json('Not found', 404);		
+		}
+
+		$marca->name = $request->input('nombre');
+
+        try{
+            $marca->save();
+
+			return response()->json($marca, 200);		
+            
+        }catch(Exception $ex){
+            if (App::environment('local')) {
+				return response()->json($ex->getMessage(), 500);
+			}
+			return response()->json('Something wrong', 500);
+        }
+        
+
+	}
+	
+	public function show($id){
+
+		$marca = Marca::find($id);
+
+		if($marca){
+			return response()->json($marca, 200);
+		}
+		return response()->json('Not found', 404);
+
+	}
 
     public function delete($id){
 

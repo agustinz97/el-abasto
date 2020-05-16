@@ -267,7 +267,6 @@
 
 			function updateTable(){
 				let marca = document.querySelector('#selectMarcas').value;
-				console.log(marca)
 
 				$('#productos-table').DataTable().destroy();
 				fillDataTable(marca)

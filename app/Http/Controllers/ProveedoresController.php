@@ -15,7 +15,11 @@ class ProveedoresController extends Controller
     public function index()
     {
         return view('proveedores.index');
-    }
+	}
+	
+	public function all(){
+		return response()->json(Proveedor::all(), 200);
+	}
 
     /*Show view to create a new resource */
     public function new(){

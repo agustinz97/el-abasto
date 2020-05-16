@@ -79,7 +79,7 @@ class ProductosController extends Controller
     }
 
     public function updatePrices(Request $request){
-        
+				
         $validator = Validator::make($request->all(), [
             'productos' => 'required|array',
             'productos.*' => 'integer',
@@ -87,7 +87,7 @@ class ProductosController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 422);
         }
 
         $productos = Producto::findMany($request->input('productos'));
@@ -98,7 +98,7 @@ class ProductosController extends Controller
                 $increment = $prod->price * $request->input('percentage') / 100;
 
                 $prod->price += $increment;
-                $prod->update();
+                $prod->save();
     
             }
         }catch(Exception $ex){
@@ -176,10 +176,14 @@ class ProductosController extends Controller
 	public function datatables(Request $request){
 
 		$marca = $request->marca;
+		$proveedor = $request->proveedor;
 
 		$productos = Producto::query()
 					->when($marca, function ($query, $marca){
 						return $query->where('marca_id', '=', $marca);
+					})
+					->when($proveedor, function ($query, $proveedor){
+						return $query->where('proveedor_id', '=', $proveedor);
 					})
 					->with('marca', 'proveedor');
 

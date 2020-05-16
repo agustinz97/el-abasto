@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $table = 'productos';
-    public $appends = ['base_price','kg_price', 'retail_price',
+    public $appends = ['base_price','kg_price', 'retail_price', 'unit_price',
 					'wholesale_price', 'resale_price', 'format_name'];
 
     public function marca(){
@@ -24,9 +24,6 @@ class Producto extends Model
 
 	public function getFormatNameAttribute(){
 		$name = $this->name;
-/* 		if($this->units > 0){
-			$name.=' '.$this->units.'u.';
-		} */
 		if($this->kg >= 1){
 			$name.=' x'.$this->kg.'Kg';
 		}elseif($this->kg > 0){
@@ -35,7 +32,7 @@ class Producto extends Model
 		return $name;
 	}
 
-	public function unitPrice($proveedor_id){
+	public function getUnitPriceAttribute($proveedor_id){
 		return $this->price / $this->units;
 	}
 

@@ -122,6 +122,11 @@
 
 @section('scripts')
     <script>
+
+		document.querySelector('#updateProveedor')
+			.addEventListener('submit', evt => {
+				evt.preventDefault()
+			})
         $(document).ready(function() {
             $('#proveedores-table').DataTable({
                 "serverside": true,
