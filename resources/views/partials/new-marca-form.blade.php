@@ -43,6 +43,9 @@
 			errorsBag.style.display = 'none'
 			errorsBag.innerHTML = ''
 			this.reset()
+
+			const selectMarcas = document.querySelector('#marca')
+			selectMarcas.options.add(new Option(res.data.name, res.data.id))
 		}catch(error){
 			console.log(error.response.data)
 

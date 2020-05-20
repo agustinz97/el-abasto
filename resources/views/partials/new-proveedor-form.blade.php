@@ -115,6 +115,9 @@
 			this.reset()
 			errorsProveedor.innerHTML = ''
 			errorsProveedor.style.display = 'none'
+
+			const selectProveedores = document.querySelector('#proveedor')
+			selectProveedores.options.add(new Option(res.data.name, res.data.id))
 		}catch(error){
 
 			if(error.response.status === 500){
