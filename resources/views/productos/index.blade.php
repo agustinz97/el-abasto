@@ -30,6 +30,11 @@
 				<div class="input-group">
 					<select class="custom-select" required id="selectProveedores" name="proveedor">
 						<option value="">Todos los proveedores</option>
+						@foreach($proveedores as $proveedor)
+							<option value="{{$proveedor->id}}" {{old('proveedor') == $proveedor->id ? 'selected' : ''}}>
+								{{$proveedor->name}}
+							</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
@@ -37,6 +42,11 @@
 				<div class="input-group">
 					<select class="custom-select" required id="selectMarcas" name="marca">
 						<option value="">Todas las marcas</option>
+						@foreach($marcas as $marca)
+						<option value="{{$marca->id}}" {{old('marca') == $marca->id ? 'selected' : ''}}>
+							{{$marca->name}}
+						</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
@@ -446,20 +456,6 @@
 
 		const selectMarcas = document.getElementById('selectMarcas')
 		const selectProveedores = document.getElementById('selectProveedores')
-		function loadSelect(select, elements){
-
-			elements.forEach(x => {
-				select.options.add(new Option(x.name, x.id))
-			})
-
-		}
-
-		axios.get(route('proveedores.all')).then(res => {
-			loadSelect(selectProveedores, res.data)
-		})
-		axios.get(route('marcas.all')).then(res => {
-			loadSelect(selectMarcas, res.data)
-		})
 
 		function updateTable(){
 			let marca = selectMarcas.value;

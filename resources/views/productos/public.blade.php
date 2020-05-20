@@ -75,6 +75,11 @@
 				<div class="input-group">
 					<select class="custom-select" required id="selectMarcas" name="marca">
 						<option value="">Todas las marcas</option>
+						@foreach($marcas as $marca)
+						<option value="{{$marca->id}}" {{old('marca') == $marca->id ? 'selected' : ''}}>
+							{{$marca->name}}
+						</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
@@ -162,6 +167,10 @@
     <script>
         $(document).ready(function() {
 
+			const loader = document.querySelector('#loader');
+			const btnPrint = document.querySelector('#btnPrint')
+			const select = document.getElementById('selectMarcas')
+
 			function fillDataTable(marca=null){
 				$('#productos-table').DataTable({
 					"order": [[ 0, "asc" ]],
@@ -231,7 +240,7 @@
 					ids,
 				}
 				
-				document.querySelector('#loader').classList.remove('hide');
+				loader.classList.remove('hide');
 
 				axios.post(url, data)
 					.then(res => {
@@ -248,34 +257,18 @@
 						})
 					})
 					.finally(() => {
-						document.querySelector('#loader').classList.add('hide');
+						loader.classList.add('hide');
 					})
 			}
 			
-			const btnPrint = document.querySelector('#btnPrint')
 			btnPrint.addEventListener('click', print)
 
-			
-			const select = document.getElementById('selectMarcas')
-			function loadSelect(select, elements){
-
-				elements.forEach(x => {
-					select.options.add(new Option(x.name, x.id))
-				})
-
-			}
-
 			function updateTable(){
-				let marca = document.querySelector('#selectMarcas').value;
+				let marca = select.value;
 
 				$('#productos-table').DataTable().destroy();
 				fillDataTable(marca)
 			}
-
-			axios.get(route('marcas.all'))
-				.then(res => {
-					loadSelect(select, res.data)
-				})
 			
 			select.addEventListener('change', updateTable)
 

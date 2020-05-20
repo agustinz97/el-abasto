@@ -18,6 +18,12 @@ class ProductosController extends Controller
 			'proveedores' => Proveedor::all(),
 			'marcas' => Marca::all()
 		]);
+	}
+	
+	public function public(){
+        return view('productos.public')->with([
+			'marcas' => Marca::all()
+		]);
     }
 
     public function new(){

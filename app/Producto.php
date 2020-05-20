@@ -32,7 +32,7 @@ class Producto extends Model
 		return $name;
 	}
 
-	public function getUnitPriceAttribute($proveedor_id){
+	public function getUnitPriceAttribute(){
 		return $this->price / $this->units;
 	}
 
